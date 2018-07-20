@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Color Survey</title>
+<link rel="stylesheet" href="bulma.min.css">
+<style>
+.cb {
+    width: 5rem;
+}
+.cbp:not(:last-child) {
+    margin-bottom: .75rem;
+}
+</style>
+</head>
+<body>
+<!--<div id="response"></div>-->
+
+<section class="section">
+<div class="container">
+
+<h1 class="title">Color Cycle Survey</h1>
+
+<div class="columns">
+<!--<div id="cycles">-->
+  <div class="column">
+  <div id="cycle1" class="cycle card">
+    <header class="card-header">
+    <p class="card-header-title">Cycle A</p>
+    </header>
+    <div class="card-content">
+    <p class="cbp"><span class="tag is-medium cb" id="c1c0"></span></p>
+    <p class="cbp"><span class="tag is-medium cb" id="c1c1"></span></p>
+    <p class="cbp"><span class="tag is-medium cb" id="c1c2"></span></p>
+    <p class="cbp"><span class="tag is-medium cb" id="c1c3"></span></p>
+    <p class="cbp"><span class="tag is-medium cb" id="c1c4"></span></p>
+    <p class="cbp"><span class="tag is-medium cb" id="c1c5"></span></p>
+    <p class="cbp"><span class="tag is-medium cb" id="c1c6"></span></p>
+    <p class="cbp"><span class="tag is-medium cb" id="c1c7"></span></p>
+    </div>
+    <footer class="card-footer">
+    <a href="#" id="pick1" class="card-footer-item">Pick</a>
+    </footer>
+  </div>
+  </div>
+  <div class="column">
+  <div id="cycle2" class="cycle card">
+    <header class="card-header">
+    <p class="card-header-title">Cycle B</p>
+    </header>
+    <div class="card-content">
+    <p class="cbp"><span class="tag is-medium cb" id="c2c0"></span></p>
+    <p class="cbp"><span class="tag is-medium cb" id="c2c1"></span></p>
+    <p class="cbp"><span class="tag is-medium cb" id="c2c2"></span></p>
+    <p class="cbp"><span class="tag is-medium cb" id="c2c3"></span></p>
+    <p class="cbp"><span class="tag is-medium cb" id="c2c4"></span></p>
+    <p class="cbp"><span class="tag is-medium cb" id="c2c5"></span></p>
+    <p class="cbp"><span class="tag is-medium cb" id="c2c6"></span></p>
+    <p class="cbp"><span class="tag is-medium cb" id="c2c7"></span></p>
+    </div>
+    <footer class="card-footer">
+    <!--<button id="pick2" class="button">Pick 2</button>-->
+     <a href="#" id="pick2" class="card-footer-item">Pick</a>
+    </footer>
+  </div>
+  </div>
+<!--</div>-->
+</div>
+
+</div>
+</div>
+
+<script>
+//let response = document.querySelector('#response')
+let set1 = 1,
+    set2 = 1;
+function submit(pick) {
+    let xhr = new XMLHttpRequest();
+    let formData = new FormData();
+    //formData.append("val", 'test val data');
+    formData.append("Set1", set1);
+    formData.append("Set2", set2);
+    formData.append("Pick", pick)
+    xhr.responseType = 'json';
+    xhr.open("POST", "/post_color");
+    xhr.onreadystatechange = function() {//Call a function when the state changes.
+        if (xhr.readyState == XMLHttpRequest.DONE && xhr.status == 200) {
+            // Request finished. Do processing here.
+            //response.textContent = JSON.stringify(xhr.response);
+            console.log(xhr.response);
+            set1 = xhr.response.Set1;
+            set2 = xhr.response.Set2;
+            for (let i = 0; i < 8; i++) {
+                document.querySelector('#c1c' + i).style.background = set1[i];
+                document.querySelector('#c2c' + i).style.background = set2[i];
+            }
+        }
+    }
+    xhr.send(formData);
+}
+document.querySelector('#pick1').addEventListener('click', function(e) {
+    e.preventDefault();
+    submit(1);
+});
+document.querySelector('#pick2').addEventListener('click', function(e) {
+    e.preventDefault();
+    submit(2);
+});
+</script>
+</body>
+</html>
