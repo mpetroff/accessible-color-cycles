@@ -12,6 +12,9 @@
 .cbp:not(:last-child) {
     margin-bottom: .75rem;
 }
+#cycles {
+    display: none;
+}
 </style>
 </head>
 <body>
@@ -22,8 +25,7 @@
 
 <h1 class="title">Color Cycle Survey</h1>
 
-<div class="columns">
-<!--<div id="sets">-->
+<div class="columns" id="sets">
   <div class="column">
   <div id="set1" class="set card">
     <header class="card-header">
@@ -32,14 +34,14 @@
     <div class="card-content">
     <div class="columns is-vcentered has-text-centered">
     <div class="column is-narrow">
-    <p class="cbp"><span class="tag is-medium cb" id="c1c0"></span></p>
-    <p class="cbp"><span class="tag is-medium cb" id="c1c1"></span></p>
-    <p class="cbp"><span class="tag is-medium cb" id="c1c2"></span></p>
-    <p class="cbp"><span class="tag is-medium cb" id="c1c3"></span></p>
-    <p class="cbp"><span class="tag is-medium cb" id="c1c4"></span></p>
-    <p class="cbp"><span class="tag is-medium cb" id="c1c5"></span></p>
-    <p class="cbp"><span class="tag is-medium cb" id="c1c6"></span></p>
-    <p class="cbp"><span class="tag is-medium cb" id="c1c7"></span></p>
+    <p class="cbp"><span class="tag is-medium cb" id="s1c0"></span></p>
+    <p class="cbp"><span class="tag is-medium cb" id="s1c1"></span></p>
+    <p class="cbp"><span class="tag is-medium cb" id="s1c2"></span></p>
+    <p class="cbp"><span class="tag is-medium cb" id="s1c3"></span></p>
+    <p class="cbp"><span class="tag is-medium cb" id="s1c4"></span></p>
+    <p class="cbp"><span class="tag is-medium cb" id="s1c5"></span></p>
+    <p class="cbp"><span class="tag is-medium cb" id="s1c6"></span></p>
+    <p class="cbp"><span class="tag is-medium cb" id="s1c7"></span></p>
     </div>
     <div class="column">
     <canvas id="canvas1"></canvas>
@@ -47,7 +49,7 @@
     </div>
     </div>
     <footer class="card-footer">
-    <a href="#" id="pick1" class="card-footer-item">Pick</a>
+    <a href="#" id="pickset1" class="card-footer-item">Pick</a>
     </footer>
   </div>
   </div>
@@ -59,6 +61,57 @@
     <div class="card-content">
     <div class="columns is-vcentered has-text-centered">
     <div class="column is-narrow">
+    <p class="cbp"><span class="tag is-medium cb" id="s2c0"></span></p>
+    <p class="cbp"><span class="tag is-medium cb" id="s2c1"></span></p>
+    <p class="cbp"><span class="tag is-medium cb" id="s2c2"></span></p>
+    <p class="cbp"><span class="tag is-medium cb" id="s2c3"></span></p>
+    <p class="cbp"><span class="tag is-medium cb" id="s2c4"></span></p>
+    <p class="cbp"><span class="tag is-medium cb" id="s2c5"></span></p>
+    <p class="cbp"><span class="tag is-medium cb" id="s2c6"></span></p>
+    <p class="cbp"><span class="tag is-medium cb" id="s2c7"></span></p>
+    </div>
+    <div class="column">
+    <canvas id="canvas2"></canvas>
+    </div>
+    </div>
+    </div>
+    <footer class="card-footer">
+    <!--<button id="pickset2" class="button">Pick 2</button>-->
+     <a href="#" id="pickset2" class="card-footer-item">Pick</a>
+    </footer>
+  </div>
+  </div>
+</div>
+
+
+
+<div class="columns" id="cycles">
+  <div class="column">
+  <div id="cycle1" class="set card">
+    <header class="card-header">
+    <p class="card-header-title">Cycle 1</p>
+    </header>
+    <div class="card-content">
+    <p class="cbp"><span class="tag is-medium cb" id="c1c0"></span></p>
+    <p class="cbp"><span class="tag is-medium cb" id="c1c1"></span></p>
+    <p class="cbp"><span class="tag is-medium cb" id="c1c2"></span></p>
+    <p class="cbp"><span class="tag is-medium cb" id="c1c3"></span></p>
+    <p class="cbp"><span class="tag is-medium cb" id="c1c4"></span></p>
+    <p class="cbp"><span class="tag is-medium cb" id="c1c5"></span></p>
+    <p class="cbp"><span class="tag is-medium cb" id="c1c6"></span></p>
+    <p class="cbp"><span class="tag is-medium cb" id="c1c7"></span></p>
+    </div>
+    <footer class="card-footer">
+    <a href="#" id="pickcycle1" class="card-footer-item">Pick</a>
+    </footer>
+  </div>
+  </div>
+  <div class="column">
+  <div id="cycle2" class="set card">
+    <header class="card-header">
+    <p class="card-header-title">Cycle 2</p>
+    </header>
+    <div class="card-content">
     <p class="cbp"><span class="tag is-medium cb" id="c2c0"></span></p>
     <p class="cbp"><span class="tag is-medium cb" id="c2c1"></span></p>
     <p class="cbp"><span class="tag is-medium cb" id="c2c2"></span></p>
@@ -68,71 +121,143 @@
     <p class="cbp"><span class="tag is-medium cb" id="c2c6"></span></p>
     <p class="cbp"><span class="tag is-medium cb" id="c2c7"></span></p>
     </div>
-    <div class="column">
-    <canvas id="canvas2"></canvas>
-    </div>
-    </div>
-    </div>
     <footer class="card-footer">
-    <!--<button id="pick2" class="button">Pick 2</button>-->
-     <a href="#" id="pick2" class="card-footer-item">Pick</a>
+    <a href="#" id="pickcycle2" class="card-footer-item">Pick</a>
     </footer>
   </div>
   </div>
-<!--</div>-->
+  <div class="column">
+  <div id="cycle3" class="set card">
+    <header class="card-header">
+    <p class="card-header-title">Cycle 3</p>
+    </header>
+    <div class="card-content">
+    <p class="cbp"><span class="tag is-medium cb" id="c3c0"></span></p>
+    <p class="cbp"><span class="tag is-medium cb" id="c3c1"></span></p>
+    <p class="cbp"><span class="tag is-medium cb" id="c3c2"></span></p>
+    <p class="cbp"><span class="tag is-medium cb" id="c3c3"></span></p>
+    <p class="cbp"><span class="tag is-medium cb" id="c3c4"></span></p>
+    <p class="cbp"><span class="tag is-medium cb" id="c3c5"></span></p>
+    <p class="cbp"><span class="tag is-medium cb" id="c3c6"></span></p>
+    <p class="cbp"><span class="tag is-medium cb" id="c3c7"></span></p>
+    </div>
+    <footer class="card-footer">
+    <a href="#" id="pickcycle3" class="card-footer-item">Pick</a>
+    </footer>
+  </div>
+  </div>
+  <div class="column">
+  <div id="cycle4" class="set card">
+    <header class="card-header">
+    <p class="card-header-title">Cycle 4</p>
+    </header>
+    <div class="card-content">
+    <p class="cbp"><span class="tag is-medium cb" id="c4c0"></span></p>
+    <p class="cbp"><span class="tag is-medium cb" id="c4c1"></span></p>
+    <p class="cbp"><span class="tag is-medium cb" id="c4c2"></span></p>
+    <p class="cbp"><span class="tag is-medium cb" id="c4c3"></span></p>
+    <p class="cbp"><span class="tag is-medium cb" id="c4c4"></span></p>
+    <p class="cbp"><span class="tag is-medium cb" id="c4c5"></span></p>
+    <p class="cbp"><span class="tag is-medium cb" id="c4c6"></span></p>
+    <p class="cbp"><span class="tag is-medium cb" id="c4c7"></span></p>
+    </div>
+    <footer class="card-footer">
+    <a href="#" id="pickcycle4" class="card-footer-item">Pick</a>
+    </footer>
+  </div>
+  </div>
 </div>
+
+
 
 </div>
 </div>
 
 <script>
 //let response = document.querySelector('#response')
-let set1 = 1,
-    set2 = 1;
-function submit(pick) {
+let set1 = -1,
+    set2 = -1,
+    orders = -1,
+    drawMode = -1,
+    setPick = -1;
+const setsDiv = document.querySelector('#sets');
+const cyclesDiv = document.querySelector('#cycles');
+function submit(orderPick) {
     let xhr = new XMLHttpRequest();
     let formData = new FormData();
     //formData.append("val", 'test val data');
-    formData.append("Set1", set1);
-    formData.append("Set2", set2);
-    formData.append("Pick", pick)
+    formData.append('Set1', set1);
+    formData.append('Set2', set2);
+    formData.append('Orders', orders);
+    formData.append('DrawMode', drawMode);
+    formData.append('SetPick', setPick);
+    formData.append('OrderPick', orderPick);
     xhr.responseType = 'json';
     xhr.open("POST", "/post_color");
-    xhr.onreadystatechange = function() {//Call a function when the state changes.
+    xhr.onreadystatechange = function() {
         if (xhr.readyState == XMLHttpRequest.DONE && xhr.status == 200) {
-            // Request finished. Do processing here.
-            //response.textContent = JSON.stringify(xhr.response);
-            console.log(xhr.response);
             set1 = xhr.response.Set1;
             set2 = xhr.response.Set2;
+            orders = xhr.response.Orders;
+            drawMode = xhr.response.DrawMode;
             for (let i = 0; i < 8; i++) {
-                document.querySelector('#c1c' + i).style.background = set1[i];
-                document.querySelector('#c2c' + i).style.background = set2[i];
+                document.querySelector('#s1c' + i).style.background = set1[i];
+                document.querySelector('#s2c' + i).style.background = set2[i];
             }
             ctx1.clearRect(0, 0, canvas1.width, canvas1.height);
             ctx2.clearRect(0, 0, canvas2.width, canvas2.height);
-            if (Math.random() >= 0.5) {
-                let s = Math.random() >= 0.5 ? 4 : 8;
+            if (drawMode < 2) {
+                let s = drawMode == 0 ? 4 : 8;
                 drawScatter(ctx1, s, set1);
                 drawScatter(ctx2, s, set2);
             } else {
-                let s = Math.random() >= 0.5 ? 2 : 4;
+                let s = drawMode == 2 ? 2 : 4;
                 drawLine(ctx1, s, set1);
                 drawLine(ctx2, s, set2);
             }
+            cyclesDiv.style.display = 'none';
+            setsDiv.style.display = 'flex';
         }
     }
     xhr.send(formData);
 }
-document.querySelector('#pick1').addEventListener('click', function(e) {
+
+function cycles(pick) {
+    setPick = pick;
+    const pickedSet = pick == 1 ? set1 : set2;
+    for (let i = 1; i <= 4; i++) {
+        for (let j = 0; j < 8; j++)
+            document.querySelector('#c' + i + 'c' + j).style.background = pickedSet[orders[i-1][j]];
+    }
+    setsDiv.style.display = 'none';
+    cyclesDiv.style.display = 'flex';
+}
+
+document.querySelector('#pickset1').addEventListener('click', function(e) {
+    e.preventDefault();
+    cycles(1);
+});
+document.querySelector('#pickset2').addEventListener('click', function(e) {
+    e.preventDefault();
+    cycles(2);
+});
+
+document.querySelector('#pickcycle1').addEventListener('click', function(e) {
     e.preventDefault();
     submit(1);
 });
-document.querySelector('#pick2').addEventListener('click', function(e) {
+document.querySelector('#pickcycle2').addEventListener('click', function(e) {
     e.preventDefault();
     submit(2);
 });
-
+document.querySelector('#pickcycle3').addEventListener('click', function(e) {
+    e.preventDefault();
+    submit(3);
+});
+document.querySelector('#pickcycle4').addEventListener('click', function(e) {
+    e.preventDefault();
+    submit(4);
+});
 
 
 
@@ -228,6 +353,8 @@ function drawLine(ctx, thickness, colors) {
         ctx.stroke();
     }
 }
+
+submit(-1);
 </script>
 </body>
 </html>
