@@ -86,7 +86,7 @@ func logout(w http.ResponseWriter, r *http.Request) {
 	session.Save(r, w)
 }
 
-func post_color(w http.ResponseWriter, r *http.Request) {
+func colors(w http.ResponseWriter, r *http.Request) {
 	session, _ := store.Get(r, "cookie-name")
 
 	// Check if user is authenticated
@@ -170,7 +170,7 @@ func main() {
 	// Configure web server
 	http.HandleFunc("/login", login)
 	http.HandleFunc("/logout", logout)
-	http.HandleFunc("/post_color", post_color)
+	http.HandleFunc("/colors", colors)
 	http.Handle("/", http.FileServer(http.Dir("static")))
 	http.ListenAndServe(":8080", context.ClearHandler(http.DefaultServeMux))
 }

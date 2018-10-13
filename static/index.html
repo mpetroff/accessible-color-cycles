@@ -18,7 +18,6 @@
 </style>
 </head>
 <body>
-<!--<div id="response"></div>-->
 
 <section class="section">
 <div class="container">
@@ -174,26 +173,17 @@
 </div>
 
 <script>
-//let response = document.querySelector('#response')
-let set1 = -1,
-    set2 = -1,
-    orders = -1,
-    drawMode = -1,
-    setPick = -1;
-const setsDiv = document.querySelector('#sets');
-const cyclesDiv = document.querySelector('#cycles');
+let set1,
+    set2,
+    orders,
+    drawMode,
+    setPick;
+const setsDiv = document.querySelector('#sets'),
+    cyclesDiv = document.querySelector('#cycles');
 function submit(orderPick) {
     let xhr = new XMLHttpRequest();
-    let formData = new FormData();
-    //formData.append("val", 'test val data');
-    formData.append('Set1', set1);
-    formData.append('Set2', set2);
-    formData.append('Orders', orders);
-    formData.append('DrawMode', drawMode);
-    formData.append('SetPick', setPick);
-    formData.append('OrderPick', orderPick);
     xhr.responseType = 'json';
-    xhr.open("POST", "/post_color");
+    xhr.open(orderPick < 0 ? 'GET' : 'POST', '/colors');
     xhr.onreadystatechange = function() {
         if (xhr.readyState == XMLHttpRequest.DONE && xhr.status == 200) {
             set1 = xhr.response.Set1;
@@ -219,7 +209,18 @@ function submit(orderPick) {
             setsDiv.style.display = 'flex';
         }
     }
-    xhr.send(formData);
+    if (orderPick < 0) {
+        xhr.send();
+    } else {
+        let formData = new FormData();
+        formData.append('Set1', set1);
+        formData.append('Set2', set2);
+        formData.append('Orders', orders);
+        formData.append('DrawMode', drawMode);
+        formData.append('SetPick', setPick);
+        formData.append('OrderPick', orderPick);
+        xhr.send(formData);
+    }
 }
 
 function cycles(pick) {
@@ -233,31 +234,18 @@ function cycles(pick) {
     cyclesDiv.style.display = 'flex';
 }
 
-document.querySelector('#pickset1').addEventListener('click', function(e) {
-    e.preventDefault();
-    cycles(1);
-});
-document.querySelector('#pickset2').addEventListener('click', function(e) {
-    e.preventDefault();
-    cycles(2);
-});
-
-document.querySelector('#pickcycle1').addEventListener('click', function(e) {
-    e.preventDefault();
-    submit(1);
-});
-document.querySelector('#pickcycle2').addEventListener('click', function(e) {
-    e.preventDefault();
-    submit(2);
-});
-document.querySelector('#pickcycle3').addEventListener('click', function(e) {
-    e.preventDefault();
-    submit(3);
-});
-document.querySelector('#pickcycle4').addEventListener('click', function(e) {
-    e.preventDefault();
-    submit(4);
-});
+for (let i = 1; i <= 2; i++) {
+    document.querySelector('#pickset' + i).addEventListener('click', function(e) {
+        e.preventDefault();
+        cycles(i);
+    });
+}
+for (let i = 1; i <= 4; i++) {
+    document.querySelector('#pickcycle' + i).addEventListener('click', function(e) {
+        e.preventDefault();
+        submit(i);
+    });
+}
 
 
 
