@@ -100,6 +100,13 @@ func colors(w http.ResponseWriter, r *http.Request) {
 				return
 			}
 
+			// Check for data collection consent
+			if qr.Consent != "yes" {
+				http.Error(w, "No consent", http.StatusInternalServerError)
+				log.Println(err)
+				return
+			}
+
 			// Create a random session ID
 			session.Values["id"] = strings.TrimRight(
 				base32.StdEncoding.EncodeToString(
