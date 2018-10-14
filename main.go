@@ -49,6 +49,7 @@ type ColorSetResponse struct {
 }
 
 type QuestionResponse struct {
+	Consent   string
 	Question1 string
 	Question2 string
 	Question3 string
@@ -110,8 +111,8 @@ func colors(w http.ResponseWriter, r *http.Request) {
 			// Log response
 			zap.L().Info("session", zap.String("id", session.Values["id"].(string)),
 				zap.String("ip", ip), zap.String("fip", fip), zap.String("ua", ua),
-				zap.String("q1", qr.Question1), zap.String("q2", qr.Question2),
-				zap.String("q3", qr.Question3))
+				zap.String("consent", qr.Consent), zap.String("q1", qr.Question1),
+				zap.String("q2", qr.Question2), zap.String("q3", qr.Question3))
 		} else {
 			// Prompt for question answers
 			w.Header().Set("Content-Type", "text/json; charset=utf-8")

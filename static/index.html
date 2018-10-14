@@ -118,8 +118,16 @@ table td {
     <p class="card-header-title">Questionnaire</p>
     </header>
     <div class="card-content">
-      <p class="content">Please answer a few (optional) questions to get started. Only anonymized data will be released.</p>
+      <p class="content">Please answer a few (optional) questions to get started. Only anonymized data will be released. See the <a href="/about.html">about &amp; privacy page</a> for details on data collection and usage. First-part cookies are also used.</p>
       <form id="questionnaire" class="content">
+        <div class="field">
+          <label class="label">Do you consent to the above mentioned data collection?</label>
+          <div class="control">
+            <label class="checkbox">
+            <input type="checkbox" name="Consent" value="yes">I consent to data collection</label>
+          </div>
+          <p class="help">Taking a survey obviously requires data collection.</p>
+        </div>
         <div class="field">
           <label class="label">Do you have a Y chromosome?</label>
           <div class="control">
@@ -511,6 +519,10 @@ function submit(orderPick) {
         xhr.send();
     } else if (orderPick == -2) {
         let formData = new FormData(document.querySelector('#questionnaire'));
+        if (!formData.has('Consent')) {
+            alert('You must consent to data collection to continue.');
+            return;
+        }
         if (!formData.has('Question1'))
             formData.append('Question1', 'dta');
         if (!formData.has('Question2'))
@@ -561,6 +573,11 @@ document.querySelector('#introductionRead').addEventListener('click', function(e
 });
 document.querySelector('#submitAnswers').addEventListener('click', function(e) {
     e.preventDefault();
+    let formData = new FormData(document.querySelector('#questionnaire'));
+    if (!formData.has('Consent')) {
+        alert('You must consent to data collection to continue.');
+        return;
+    }
     questionsDiv.style.display = 'none';
     directionsDiv.style.display = 'inline';
 });
