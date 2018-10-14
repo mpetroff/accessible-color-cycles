@@ -20,14 +20,38 @@
     display: flex;
     justify-content: center;
 }
+
+.site {
+  display: flex;
+  min-height: 100vh;
+  flex-direction: column;
+}
+.site-content {
+  flex: 1;
+}
+.site-footer {
+  padding: 10px;
+}
 </style>
 </head>
-<body>
+<body class="site">
 
+<main class="site-content">
 <section class="section">
 <div class="container">
 
-<h1 class="title">Color Cycle Survey</h1>
+<div class="columns is-vcentered is-mobile">
+<div class="column is-narrow">
+<h1 class="title is-hidden-mobile is-marginless">Color Cycle Survey</h1>
+<h1 class="title is-hidden-tablet is-5 is-marginless">Color Cycle Survey</h1>
+</div>
+<div class="column">
+<div class="tags has-addons" style="justify-content: right;">
+  <span class="tag">Picks</span>
+  <span id="numPicks" class="tag is-primary">0</span>
+</div>
+</div>
+</div>
 
 <div class="columns" id="introduction">
   <div class="column">
@@ -350,7 +374,16 @@
 
 
 </div>
-</div>
+</section>
+</main>
+
+<footer class="site-footer has-background-light">
+  <div class="content has-text-grey has-text-centered">
+    <p>
+      A project by <a class="has-text-grey has-text-weight-bold" href="https://mpetroff.net/">Matthew Petroff</a>&emsp;|&emsp;<a class="has-text-grey has-text-weight-bold" href="/about.html">About &amp; Privacy</a>
+    </p>
+  </div>
+</footer>
 
 <script>
 const colorblindnessSelect = document.querySelector('#colorblindnessSelect'),
@@ -379,7 +412,8 @@ const introductionDiv = document.querySelector('#introduction'),
     questionsDiv = document.querySelector('#questions'),
     directionsDiv = document.querySelector('#directions'),
     setsDiv = document.querySelector('#sets'),
-    cyclesDiv = document.querySelector('#cycles');
+    cyclesDiv = document.querySelector('#cycles'),
+    picksDiv = document.querySelector('#numPicks');
 function submit(orderPick) {
     let xhr = new XMLHttpRequest();
     xhr.responseType = 'json';
@@ -412,6 +446,7 @@ function submit(orderPick) {
             directionsDiv.style.display = 'none';
             cyclesDiv.style.display = 'none';
             setsDiv.style.display = 'flex';
+            picksDiv.textContent = xhr.response.Picks;
         }
     }
     if (orderPick == -1) {

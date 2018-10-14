@@ -35,6 +35,7 @@ type ColorSetQuestion struct {
 	Set2     []string
 	Orders   []string
 	DrawMode int
+	Picks    int
 }
 
 type ColorSetResponse struct {
@@ -97,6 +98,9 @@ func colors(w http.ResponseWriter, r *http.Request) {
 				base32.StdEncoding.EncodeToString(
 					securecookie.GenerateRandomKey(32)), "=")
 
+			// Initialize response counter
+			session.Values["picks"] = 0
+
 			// Log response
 			zap.L().Info("session", zap.String("id", session.Values["id"].(string)),
 				zap.String("q1", qr.Question1), zap.String("q2", qr.Question2),
@@ -123,10 +127,11 @@ func colors(w http.ResponseWriter, r *http.Request) {
 	// Randomly pick a drawing mode
 	drawMode := rand.Intn(4)
 
-	// Save generated sets, permutations, and drawing mode in session
+	// Number of picks the user has made
+	picks := session.Values["picks"].(int)
+
+	// Retrieve previous information from cryptographically-signed cookie
 	flashes := session.Flashes()
-	session.AddFlash(strings.Join(cycle1, ",") + ";" + strings.Join(cycle2, ",") + ";" + strings.Join(ordersStr, ",") + ";" + strconv.Itoa(drawMode))
-	session.Save(r, w)
 
 	// Parse, verify, and record response
 	if r.Method == "POST" && len(flashes) > 0 {
@@ -150,11 +155,17 @@ func colors(w http.ResponseWriter, r *http.Request) {
 				zap.String("c1", csr.Set1), zap.String("c2", csr.Set2),
 				zap.String("o", csr.Orders), zap.Int("dm", csr.DrawMode),
 				zap.Int8("sp", csr.SetPick), zap.Int8("cp", csr.OrderPick))
+			picks += 1
+			session.Values["picks"] = picks
 		}
 	}
 
+	// Save generated sets, permutations, and drawing mode in session
+	session.AddFlash(strings.Join(cycle1, ",") + ";" + strings.Join(cycle2, ",") + ";" + strings.Join(ordersStr, ",") + ";" + strconv.Itoa(drawMode))
+	session.Save(r, w)
+
 	// Encode JSON response with color cycles
-	csq := ColorSetQuestion{cycle1, cycle2, ordersStr, drawMode}
+	csq := ColorSetQuestion{cycle1, cycle2, ordersStr, drawMode, session.Values["picks"].(int)}
 	w.Header().Set("Content-Type", "text/json; charset=utf-8")
 	if err := json.NewEncoder(w).Encode(csq); err != nil {
 		http.Error(w, "Error encoding JSON", http.StatusInternalServerError)
