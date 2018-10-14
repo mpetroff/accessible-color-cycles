@@ -44,6 +44,10 @@ type ColorSetResponse struct {
 	OrderPick int8
 }
 
+type QuestionResponse struct {
+	Question1 string
+}
+
 func read_colors_csv(filename string) [][]string {
 	csvFile, err := os.Open(filename)
 	if err != nil {
@@ -65,35 +69,32 @@ func read_colors_csv(filename string) [][]string {
 var color_sets = read_colors_csv("colors_hsv_sorted.csv")
 var len_color_sets = int32(len(color_sets))
 
-func login(w http.ResponseWriter, r *http.Request) {
-	session, _ := store.Get(r, "cookie-name")
-
-	// Authentication goes here
-	// ...
-
-	// Set user as authenticated
-	session.Values["authenticated"] = true
-	session.Save(r, w)
-
-	fmt.Fprintln(w, "auth")
-}
-
-func logout(w http.ResponseWriter, r *http.Request) {
-	session, _ := store.Get(r, "cookie-name")
-
-	// Revoke users authentication
-	session.Values["authenticated"] = false
-	session.Save(r, w)
-}
-
 func colors(w http.ResponseWriter, r *http.Request) {
 	session, _ := store.Get(r, "cookie-name")
 
-	// Check if user is authenticated
-	/*if auth, ok := session.Values["authenticated"].(bool); !ok || !auth {
-		http.Error(w, "Forbidden", http.StatusForbidden)
-		return
-	}*/
+	// Make sure user has answered questionnaire
+	if init, ok := session.Values["initialized"].(bool); !ok || !init {
+		if r.Method == "POST" {
+			if err := r.ParseMultipartForm(1024); err != nil {
+				http.Error(w, "Error parsing response", http.StatusInternalServerError)
+				log.Println(err)
+				return
+			}
+			qr := new(QuestionResponse)
+			if err := decoder.Decode(qr, r.Form); err != nil {
+				http.Error(w, "Error decoding response", http.StatusInternalServerError)
+				log.Println(err)
+				return
+			}
+			log.Printf("Question response: %s\n", qr.Question1)
+
+			session.Values["initialized"] = true
+		} else {
+			w.Header().Set("Content-Type", "text/json; charset=utf-8")
+			w.Write([]byte("{\"Question\": true}"))
+			return
+		}
+	}
 
 	// Randomly pick two color sets
 	cycle1 := append([]string(nil), color_sets[rand.Int31n(len_color_sets)]...)
@@ -168,8 +169,6 @@ func main() {
 	zap.ReplaceGlobals(logger)
 
 	// Configure web server
-	http.HandleFunc("/login", login)
-	http.HandleFunc("/logout", logout)
 	http.HandleFunc("/colors", colors)
 	http.Handle("/", http.FileServer(http.Dir("static")))
 	http.ListenAndServe(":8080", context.ClearHandler(http.DefaultServeMux))
