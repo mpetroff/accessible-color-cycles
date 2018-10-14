@@ -452,7 +452,9 @@ table td {
 <footer class="site-footer has-background-light">
   <div class="content has-text-grey has-text-centered is-size-7">
     <p>
-      A project by <a class="has-text-grey has-text-weight-bold" href="https://mpetroff.net/">Matthew Petroff</a>&emsp;|&emsp;<a class="has-text-grey has-text-weight-bold" href="/about.html">About &amp; Privacy</a>
+      <span class="is-hidden-mobile">A project by <a class="has-text-grey has-text-weight-bold" href="https://mpetroff.net/">Matthew Petroff</a> &emsp;|&emsp;</span>
+      <a class="has-text-grey has-text-weight-bold" href="/about.html">About &amp; Privacy</a> &emsp;|&emsp;
+      <a class="has-text-grey has-text-weight-bold" href="#" id="newSession">New Session</a>
     </p>
   </div>
 </footer>
@@ -592,6 +594,17 @@ document.querySelector('#submitAnswers').addEventListener('click', function(e) {
 document.querySelector('#directionsRead').addEventListener('click', function(e) {
     e.preventDefault();
     submit(-2);
+});
+
+document.querySelector('#newSession').addEventListener('click', function(e) {
+    e.preventDefault();
+    let xhr = new XMLHttpRequest();
+    xhr.open('POST', '/colors/new');
+    xhr.onreadystatechange = function() {
+        if (xhr.readyState == XMLHttpRequest.DONE)
+            window.location.reload(true);
+    };
+    xhr.send();
 });
 
 

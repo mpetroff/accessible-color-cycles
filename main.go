@@ -76,6 +76,12 @@ func read_colors_csv(filename string) [][]string {
 var color_sets = read_colors_csv("colors_hsv_sorted.csv")
 var len_color_sets = int32(len(color_sets))
 
+func new_session(w http.ResponseWriter, r *http.Request) {
+	session, _ := store.Get(r, "survey")
+	session.Options.MaxAge = -1
+	session.Save(r, w)
+}
+
 func colors(w http.ResponseWriter, r *http.Request) {
 	session, _ := store.Get(r, "survey")
 
@@ -259,6 +265,7 @@ func main() {
 
 	// Configure web server
 	http.HandleFunc("/colors", colors)
+	http.HandleFunc("/colors/new", new_session)
 	http.Handle("/", http.FileServer(http.Dir("static")))
 	http.ListenAndServe(":8080", context.ClearHandler(http.DefaultServeMux))
 }
