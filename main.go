@@ -1,6 +1,7 @@
 package main
 
 import (
+	"encoding/base32"
 	"encoding/csv"
 	"encoding/json"
 	"fmt"
@@ -14,6 +15,7 @@ import (
 
 	"github.com/gorilla/context"
 	"github.com/gorilla/schema"
+	"github.com/gorilla/securecookie"
 	"github.com/gorilla/sessions"
 	"go.uber.org/zap"
 	"go.uber.org/zap/zapcore"
@@ -46,6 +48,8 @@ type ColorSetResponse struct {
 
 type QuestionResponse struct {
 	Question1 string
+	Question2 string
+	Question3 string
 }
 
 func read_colors_csv(filename string) [][]string {
@@ -70,11 +74,12 @@ var color_sets = read_colors_csv("colors_hsv_sorted.csv")
 var len_color_sets = int32(len(color_sets))
 
 func colors(w http.ResponseWriter, r *http.Request) {
-	session, _ := store.Get(r, "cookie-name")
+	session, _ := store.Get(r, "survey")
 
 	// Make sure user has answered questionnaire
-	if init, ok := session.Values["initialized"].(bool); !ok || !init {
+	if init := session.Values["id"]; init == nil {
 		if r.Method == "POST" {
+			// Parse response
 			if err := r.ParseMultipartForm(1024); err != nil {
 				http.Error(w, "Error parsing response", http.StatusInternalServerError)
 				log.Println(err)
@@ -86,10 +91,18 @@ func colors(w http.ResponseWriter, r *http.Request) {
 				log.Println(err)
 				return
 			}
-			log.Printf("Question response: %s\n", qr.Question1)
 
-			session.Values["initialized"] = true
+			// Create a random session ID
+			session.Values["id"] = strings.TrimRight(
+				base32.StdEncoding.EncodeToString(
+					securecookie.GenerateRandomKey(32)), "=")
+
+			// Log response
+			zap.L().Info("session", zap.String("id", session.Values["id"].(string)),
+				zap.String("q1", qr.Question1), zap.String("q2", qr.Question2),
+				zap.String("q3", qr.Question3))
 		} else {
+			// Prompt for question answers
 			w.Header().Set("Content-Type", "text/json; charset=utf-8")
 			w.Write([]byte("{\"Question\": true}"))
 			return
@@ -133,10 +146,10 @@ func colors(w http.ResponseWriter, r *http.Request) {
 		} else {
 			//log.Printf("Good match %s %s\n", flashes[0], csr.Set1 + ";" + csr.Set2)
 			//log.Println("Pick", csr.Pick)
-			zap.L().Info("pick", zap.String("c1", csr.Set1),
-				zap.String("c2", csr.Set2), zap.String("o", csr.Orders),
-				zap.Int("dm", csr.DrawMode), zap.Int8("sp", csr.SetPick),
-				zap.Int8("cp", csr.OrderPick))
+			zap.L().Info("pick", zap.String("id", session.Values["id"].(string)),
+				zap.String("c1", csr.Set1), zap.String("c2", csr.Set2),
+				zap.String("o", csr.Orders), zap.Int("dm", csr.DrawMode),
+				zap.Int8("sp", csr.SetPick), zap.Int8("cp", csr.OrderPick))
 		}
 	}
 

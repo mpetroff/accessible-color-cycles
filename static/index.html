@@ -5,6 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Color Cycle Survey</title>
 <link rel="stylesheet" href="bulma.min.css">
+<link rel="stylesheet" href="bulma-divider.min.css">
 <style>
 .cb {
     width: 5rem;
@@ -12,8 +13,12 @@
 .cbp:not(:last-child) {
     margin-bottom: .75rem;
 }
-#cycles, #sets, #questions {
+#cycles, #sets, #questions, #directions, #introduction {
     display: none;
+}
+.tag-box {
+    display: flex;
+    justify-content: center;
 }
 </style>
 </head>
@@ -24,17 +29,181 @@
 
 <h1 class="title">Color Cycle Survey</h1>
 
+<div class="columns" id="introduction">
+  <div class="column">
+  <div class="card">
+    <header class="card-header">
+    <p class="card-header-title">Introduction</p>
+    </header>
+    <div class="card-content">
+      <p class="content has-text-justified">
+        A color cycle is an ordered set of colors used for plotting categorical
+        data for visualization. Unfortunately, most existing color cycles are
+        not colorblind-friendly. The technical aspect of this can be resolved
+        by enforcing minimum perceptual distances between colors, both for
+        normal color vision and for various types of simulated color vision
+        deficiencies.
+      </p><p class="content has-text-justified">
+        However, this leaves the aesthetic aspect, which is where
+        this survey comes in. The goal of this survey is to crowd-source the
+        information needed to generate aesthetically pleasing color cycles that
+        are also colorblind-friendly. Randomly generated color sets and cycles,
+        which have a minimum perceptual distance enforced between colors, are
+        presented for the user to choose the most pleasing one. This data will
+        then be used to train a model to generate aesthetically pleasing color
+        cycles. Additionally, once anonymized, the collected data will be
+        released under a permissive license.
+      </p>
+    </div>
+    <footer class="card-footer">
+    <a href="#" id="introductionRead" class="card-footer-item">Continue</a>
+    </footer>
+  </div>
+  </div>
+</div>
+
 <div class="columns" id="questions">
   <div class="column">
   <div class="card">
     <header class="card-header">
-    <p class="card-header-title">Questions</p>
+    <p class="card-header-title">Questionnaire</p>
     </header>
     <div class="card-content">
-    Questions...
+      <p class="content">Please answer a few (optional) questions to get started. Only anonymized data will be released.</p>
+      <form id="questionnaire" class="content">
+        <div class="field">
+          <label class="label">Do you have a Y chromosome?</label>
+          <div class="control">
+            <label class="radio">
+              <input type="radio" name="Question1" value="y">Yes
+            </label>
+            <label class="radio">
+              <input type="radio" name="Question1" value="n">No
+            </label>
+            <label class="radio">
+              <input type="radio" name="Question1" value="dk">Don&rsquo;t know
+            </label>
+            <label class="radio">
+              <input type="radio" name="Question1" value="dta">Decline to answer
+            </label>
+          </div>
+          <p class="help">This question is relevant to the genetics of colorblindness.</p>
+        </div>
+        <div class="field">
+          <label class="label">Are you colorblind?</label>
+          <div class="control">
+            <label class="radio">
+              <input type="radio" name="Question2" value="y">Yes
+            </label>
+            <label class="radio">
+              <input type="radio" name="Question2" value="n">No
+            </label>
+            <label class="radio">
+              <input type="radio" name="Question2" value="dk">Don&rsquo;t know
+            </label>
+            <label class="radio">
+              <input type="radio" name="Question2" value="dta">Decline to answer
+            </label>
+          </div>
+        </div>
+        <div class="field">
+          <label class="label">Type of colorblindness</label>
+          <div class="control">
+            <div class="select">
+              <select disabled id="colorblindnessSelect" name="Question3">
+                <option value="na">Not applicable</option>
+                <option value="dta">Decline to answer</option>
+                <option value="dk">Don't know</option>
+                <option value="dy">Deuteranomaly (partial green deficiency) [most common]</option>
+                <option value="py">Protanomaly (partial red deficiency)</option>
+                <option value="da">Deuteranopia (complete green deficiency)</option>
+                <option value="pa">Protanopia (complete red deficiency)</option>
+                <option value="ty">Tritanomaly (partial blue deficiency) [rare]</option>
+                <option value="ta">Tritanopia (complete blue deficiency) [rare]</option>
+                <option value="m">Monochromasy (complete colorblindness) [rare]</option>
+              </select>
+            </div>
+          </div>
+        </div>
+      </form>
+      <p class="content">If you are running software to change your display&rsquo;s color temperature, e.g. f.lux, Night Shift, or Redshift, please turn it off before continuing.</p>
     </div>
     <footer class="card-footer">
     <a href="#" id="submitAnswers" class="card-footer-item">Continue</a>
+    </footer>
+  </div>
+  </div>
+</div>
+
+<div class="columns" id="directions">
+  <div class="column">
+  <div class="card">
+    <header class="card-header">
+    <p class="card-header-title">Directions</p>
+    </header>
+    <div class="card-content">
+      <p class="content has-text-weight-bold">Each iteration of this survey consists of two steps:</p>
+      <p class="content">First, you'll be presented with two color sets, which are ordered by hue. Choose the colors you prefer (not the order).</p>
+      <div class="columns">
+      <div class="column tag-box">
+      <div class="tags">
+        <span class="tag is-primary">A</span>
+        <span class="tag is-info">B</span>
+        <span class="tag is-light">C</span>
+        <span class="tag is-warning">D</span>
+      </div>
+      </div>
+      <div class="is-divider-vertical" data-content="OR"></div>
+      <div class="column tag-box">
+      <div class="tags">
+        <span class="tag is-link">E</span>
+        <span class="tag is-success">F</span>
+        <span class="tag is-danger">G</span>
+        <span class="tag is-dark">H</span>
+      </div>
+      </div>
+      </div>
+      <p class="content">Then, you'll be presented with four different permutations of the set you chose. Choose the order you prefer (the colors are the same).</p>
+      <div class="columns">
+      <div class="column tag-box">
+      <div class="tags">
+        <span class="tag is-primary">1</span>
+        <span class="tag is-info">2</span>
+        <span class="tag is-light">3</span>
+        <span class="tag is-warning">4</span>
+      </div>
+      </div>
+      <div class="is-divider-vertical" data-content="OR"></div>
+      <div class="column tag-box">
+      <div class="tags">
+        <span class="tag is-warning">4</span>
+        <span class="tag is-info">2</span>
+        <span class="tag is-primary">1</span>
+        <span class="tag is-light">3</span>
+      </div>
+      </div>
+      <div class="is-divider-vertical" data-content="OR"></div>
+      <div class="column tag-box">
+      <div class="tags">
+        <span class="tag is-light">3</span>
+        <span class="tag is-primary">1</span>
+        <span class="tag is-warning">4</span>
+        <span class="tag is-info">2</span>
+      </div>
+      </div>
+      <div class="is-divider-vertical" data-content="OR"></div>
+      <div class="column tag-box">
+      <div class="tags">
+        <span class="tag is-info">2</span>
+        <span class="tag is-light">3</span>
+        <span class="tag is-primary">1</span>
+        <span class="tag is-warning">4</span>
+      </div>
+      </div>
+      </div>
+    </div>
+    <footer class="card-footer">
+    <a href="#" id="directionsRead" class="card-footer-item">Continue</a>
     </footer>
   </div>
   </div>
@@ -189,12 +358,31 @@
 </div>
 
 <script>
+const colorblindnessSelect = document.querySelector('#colorblindnessSelect'),
+    colorblindnessSelectNA = colorblindnessSelect.namedItem('na');
+document.addEventListener('DOMContentLoaded',function() {
+    document.querySelectorAll('input[name="Question2"]').forEach(function(e) {
+        e.onchange=function(evt) {
+            if (evt.target.value == 'y') {
+                colorblindnessSelect.remove(0);
+                colorblindnessSelect.disabled = false;
+            } else {
+                colorblindnessSelect.add(colorblindnessSelectNA, 0);
+                colorblindnessSelect.disabled = true;
+            }
+        };
+    });
+},false);
+
+
 let set1,
     set2,
     orders,
     drawMode,
     setPick;
-const questionsDiv = document.querySelector('#questions'),
+const introductionDiv = document.querySelector('#introduction'),
+    questionsDiv = document.querySelector('#questions'),
+    directionsDiv = document.querySelector('#directions'),
     setsDiv = document.querySelector('#sets'),
     cyclesDiv = document.querySelector('#cycles');
 function submit(orderPick) {
@@ -203,9 +391,8 @@ function submit(orderPick) {
     xhr.open(orderPick == -1 ? 'GET' : 'POST', '/colors');
     xhr.onreadystatechange = function() {
         if (xhr.readyState == XMLHttpRequest.DONE && xhr.status == 200) {
-            console.log(xhr);
             if (xhr.response.Question) {
-                questionsDiv.style.display = 'flex';
+                introductionDiv.style.display = 'flex';
                 return;
             }
             set1 = xhr.response.Set1;
@@ -227,7 +414,7 @@ function submit(orderPick) {
                 drawLine(ctx1, s, set1);
                 drawLine(ctx2, s, set2);
             }
-            questionsDiv.style.display = 'none';
+            directionsDiv.style.display = 'none';
             cyclesDiv.style.display = 'none';
             setsDiv.style.display = 'flex';
         }
@@ -235,8 +422,13 @@ function submit(orderPick) {
     if (orderPick == -1) {
         xhr.send();
     } else if (orderPick == -2) {
-        let formData = new FormData();
-        formData.append('Question1', 'asdfasdfasdf');
+        let formData = new FormData(document.querySelector('#questionnaire'));
+        if (!formData.has('Question1'))
+            formData.append('Question1', 'dta');
+        if (!formData.has('Question2'))
+            formData.append('Question2', 'dta');
+        if (!formData.has('Question3'))
+            formData.append('Question3', formData.get('Question2') == 'y' ? 'dta' : 'na');
         xhr.send(formData);
     } else {
         let formData = new FormData();
@@ -273,7 +465,18 @@ for (let i = 1; i <= 4; i++) {
         submit(i);
     });
 }
+
+document.querySelector('#introductionRead').addEventListener('click', function(e) {
+    e.preventDefault();
+    introductionDiv.style.display = 'none';
+    questionsDiv.style.display = 'flex';
+});
 document.querySelector('#submitAnswers').addEventListener('click', function(e) {
+    e.preventDefault();
+    questionsDiv.style.display = 'none';
+    directionsDiv.style.display = 'flex';
+});
+document.querySelector('#directionsRead').addEventListener('click', function(e) {
     e.preventDefault();
     submit(-2);
 });
