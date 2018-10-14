@@ -84,6 +84,14 @@ func colors(w http.ResponseWriter, r *http.Request) {
 	fip := r.Header.Get("X-Forwarded-For")
 	ua := r.Header.Get("User-Agent")
 
+	// Truncate to avoid logging too much data
+	if len(fip) > 100 {
+		fip = fip[:100]
+	}
+	if len(ua) > 100 {
+		ua = ua[:100]
+	}
+
 	// Make sure user has answered questionnaire
 	if init := session.Values["id"]; init == nil {
 		if r.Method == "POST" {
@@ -103,7 +111,31 @@ func colors(w http.ResponseWriter, r *http.Request) {
 			// Check for data collection consent
 			if qr.Consent != "yes" {
 				http.Error(w, "No consent", http.StatusInternalServerError)
-				log.Println(err)
+				return
+			}
+
+			// Validate answers
+			q1 := qr.Question1
+			if q1 != "y" && q1 != "n" && q1 != "dk" && q1 != "dta" {
+				zap.L().Info("badanswer", zap.String("ip", ip), zap.String("fip", fip),
+					zap.String("ua", ua), zap.Int("n", 1))
+				http.Error(w, "Invalid answer", http.StatusInternalServerError)
+				return
+			}
+			q2 := qr.Question2
+			if q2 != "y" && q2 != "n" && q2 != "dk" && q2 != "dta" {
+				zap.L().Info("badanswer", zap.String("ip", ip), zap.String("fip", fip),
+					zap.String("ua", ua), zap.Int("n", 2))
+				http.Error(w, "Invalid answer", http.StatusInternalServerError)
+				return
+			}
+			q3 := qr.Question3
+			if q3 != "na" && q3 != "dta" && q3 != "dk" && q3 != "dy" &&
+				q3 != "py" && q3 != "da" && q3 != "pa" && q3 != "ty" &&
+				q3 != "ta" && q3 != "m" && q3 != "o" {
+				zap.L().Info("badanswer", zap.String("ip", ip), zap.String("fip", fip),
+					zap.String("ua", ua), zap.Int("n", 3))
+				http.Error(w, "Invalid answer", http.StatusInternalServerError)
 				return
 			}
 
@@ -166,15 +198,22 @@ func colors(w http.ResponseWriter, r *http.Request) {
 			zap.L().Info("badmatch", zap.String("id", session.Values["id"].(string)),
 				zap.String("ip", ip), zap.String("fip", fip))
 		} else {
-			//log.Printf("Good match %s %s\n", flashes[0], csr.Set1 + ";" + csr.Set2)
-			//log.Println("Pick", csr.Pick)
-			zap.L().Info("pick", zap.String("id", session.Values["id"].(string)),
-				zap.String("ip", ip), zap.String("fip", fip), zap.String("ua", ua),
-				zap.String("c1", csr.Set1), zap.String("c2", csr.Set2),
-				zap.String("o", csr.Orders), zap.Int("dm", csr.DrawMode),
-				zap.Int8("sp", csr.SetPick), zap.Int8("cp", csr.OrderPick))
-			picks += 1
-			session.Values["picks"] = picks
+			sp := csr.SetPick
+			cp := csr.OrderPick
+			if sp > 0 && sp <= 2 && cp > 0 && cp <= 4 {
+				//log.Printf("Good match %s %s\n", flashes[0], csr.Set1 + ";" + csr.Set2)
+				//log.Println("Pick", csr.Pick)
+				zap.L().Info("pick", zap.String("id", session.Values["id"].(string)),
+					zap.String("ip", ip), zap.String("fip", fip), zap.String("ua", ua),
+					zap.String("c1", csr.Set1), zap.String("c2", csr.Set2),
+					zap.String("o", csr.Orders), zap.Int("dm", csr.DrawMode),
+					zap.Int8("sp", sp), zap.Int8("cp", cp))
+				picks += 1
+				session.Values["picks"] = picks
+			} else {
+				zap.L().Info("badpick", zap.String("id", session.Values["id"].(string)),
+					zap.String("ip", ip), zap.String("fip", fip))
+			}
 		}
 	}
 
