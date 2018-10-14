@@ -81,6 +81,7 @@ func colors(w http.ResponseWriter, r *http.Request) {
 	// Find IP address of client
 	ip, _, _ := net.SplitHostPort(r.RemoteAddr)
 	fip := r.Header.Get("X-Forwarded-For")
+	ua := r.Header.Get("User-Agent")
 
 	// Make sure user has answered questionnaire
 	if init := session.Values["id"]; init == nil {
@@ -108,7 +109,7 @@ func colors(w http.ResponseWriter, r *http.Request) {
 
 			// Log response
 			zap.L().Info("session", zap.String("id", session.Values["id"].(string)),
-				zap.String("ip", ip), zap.String("fip", fip),
+				zap.String("ip", ip), zap.String("fip", fip), zap.String("ua", ua),
 				zap.String("q1", qr.Question1), zap.String("q2", qr.Question2),
 				zap.String("q3", qr.Question3))
 		} else {
@@ -160,7 +161,7 @@ func colors(w http.ResponseWriter, r *http.Request) {
 			//log.Printf("Good match %s %s\n", flashes[0], csr.Set1 + ";" + csr.Set2)
 			//log.Println("Pick", csr.Pick)
 			zap.L().Info("pick", zap.String("id", session.Values["id"].(string)),
-				zap.String("ip", ip), zap.String("fip", fip),
+				zap.String("ip", ip), zap.String("fip", fip), zap.String("ua", ua),
 				zap.String("c1", csr.Set1), zap.String("c2", csr.Set2),
 				zap.String("o", csr.Orders), zap.Int("dm", csr.DrawMode),
 				zap.Int8("sp", csr.SetPick), zap.Int8("cp", csr.OrderPick))
