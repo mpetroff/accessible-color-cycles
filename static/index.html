@@ -36,17 +36,33 @@
 table td {
   padding: .3em .2em;
 }
+
+@media (max-width: 1023px) {
+  .cb {
+    font-size: 0.75rem !important;
+  }
+  .cbp {
+    margin-bottom: 0 !important;
+  }
+  .card-content, .card-header-title, .card-footer-item {
+    padding: 0.5rem;
+  }
+  table td {
+    padding: 0 .2em;
+  }
+}
 </style>
 </head>
 <body class="site">
 
 <main class="site-content">
-<section class="section">
-<div class="container">
+<div style="height: 1rem;"></div>
+<div style="height: 2rem;" class="is-hidden-touch"></div>
+<div class="container" style="padding: 0 1rem;">
 
 <div class="columns is-vcentered is-mobile">
 <div class="column is-narrow">
-  <h1 class="title is-marginless is-size-5-mobile">Color Cycle Survey</h1>
+  <h1 class="title is-marginless is-size-5-touch">Color Cycle Survey</h1>
 </div>
 <div class="column">
 <div class="tags has-addons" style="justify-content: right;">
@@ -87,7 +103,8 @@ table td {
   </div>
 </div>
 
-<div class="columns" id="questions">
+<div id="questions">
+<div class="columns">
   <div class="column">
   <div class="card">
     <header class="card-header">
@@ -157,8 +174,10 @@ table td {
   </div>
   </div>
 </div>
+</div>
 
-<div class="columns" id="directions">
+<div id="directions">
+<div class="columns">
   <div class="column">
   <div class="card">
     <header class="card-header">
@@ -230,15 +249,17 @@ table td {
   </div>
   </div>
 </div>
+</div>
 
-<div class="columns" id="sets">
+<div id="sets">
+<div class="columns">
   <div class="column">
   <div id="set1" class="set card">
     <header class="card-header">
     <p class="card-header-title">Set A</p>
     </header>
     <div class="card-content">
-    <div class="columns is-vcentered has-text-centered">
+    <div class="columns is-vcentered has-text-centered is-mobile">
     <div class="column is-narrow">
     <p class="cbp"><span class="tag is-medium cb" id="s1c0"></span></p>
     <p class="cbp"><span class="tag is-medium cb" id="s1c1"></span></p>
@@ -265,7 +286,7 @@ table td {
     <p class="card-header-title">Set B</p>
     </header>
     <div class="card-content">
-    <div class="columns is-vcentered has-text-centered">
+    <div class="columns is-vcentered has-text-centered is-mobile">
     <div class="column is-narrow">
     <p class="cbp"><span class="tag is-medium cb" id="s2c0"></span></p>
     <p class="cbp"><span class="tag is-medium cb" id="s2c1"></span></p>
@@ -288,10 +309,13 @@ table td {
   </div>
   </div>
 </div>
+</div>
 
 
-
-<div class="columns" id="cycles">
+<div id="cycles">
+<div class="columns">
+<div class="column">
+<div class="columns is-mobile">
   <div class="column">
   <div id="cycle1" class="set card">
     <header class="card-header">
@@ -340,6 +364,10 @@ table td {
     </footer>
   </div>
   </div>
+</div>
+</div>
+<div class="column">
+<div class="columns is-mobile">
   <div class="column">
   <div id="cycle3" class="set card">
     <header class="card-header">
@@ -389,11 +417,13 @@ table td {
   </div>
   </div>
 </div>
+</div>
+</div>
+</div>
 
 
 
 </div>
-</section>
 </main>
 
 <footer class="site-footer has-background-light">
@@ -440,7 +470,7 @@ function submit(orderPick) {
     xhr.onreadystatechange = function() {
         if (xhr.readyState == XMLHttpRequest.DONE && xhr.status == 200) {
             if (xhr.response.Question) {
-                introductionDiv.style.display = 'flex';
+                introductionDiv.style.display = 'inline';
                 return;
             }
             set1 = xhr.response.Set1;
@@ -464,7 +494,7 @@ function submit(orderPick) {
             }
             directionsDiv.style.display = 'none';
             cyclesDiv.style.display = 'none';
-            setsDiv.style.display = 'flex';
+            setsDiv.style.display = 'inline';
             picksDiv.textContent = xhr.response.Picks;
         }
     }
@@ -499,7 +529,7 @@ function cycles(pick) {
             document.querySelector('#c' + i + 'c' + j).style.background = pickedSet[orders[i-1][j]];
     }
     setsDiv.style.display = 'none';
-    cyclesDiv.style.display = 'flex';
+    cyclesDiv.style.display = 'inline';
 }
 
 for (let i = 1; i <= 2; i++) {
@@ -518,12 +548,12 @@ for (let i = 1; i <= 4; i++) {
 document.querySelector('#introductionRead').addEventListener('click', function(e) {
     e.preventDefault();
     introductionDiv.style.display = 'none';
-    questionsDiv.style.display = 'flex';
+    questionsDiv.style.display = 'inline';
 });
 document.querySelector('#submitAnswers').addEventListener('click', function(e) {
     e.preventDefault();
     questionsDiv.style.display = 'none';
-    directionsDiv.style.display = 'flex';
+    directionsDiv.style.display = 'inline';
 });
 document.querySelector('#directionsRead').addEventListener('click', function(e) {
     e.preventDefault();
