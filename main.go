@@ -202,6 +202,14 @@ func main() {
 	defer logger.Sync() // Flushes buffer, if any
 	zap.ReplaceGlobals(logger)
 
+	// Only send cookie to data endpoint, delete cookie when browser is closed,
+	// and don't allow access from JavaScript
+	store.Options = &sessions.Options{
+		Path:     "/colors",
+		MaxAge:   0,
+		HttpOnly: true,
+	}
+
 	// Configure web server
 	http.HandleFunc("/colors", colors)
 	http.Handle("/", http.FileServer(http.Dir("static")))
