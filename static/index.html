@@ -31,6 +31,7 @@
 }
 .site-footer {
   padding: 10px;
+  margin-top: 20px;
 }
 
 table td {
@@ -51,6 +52,10 @@ table td {
     padding: 0 .2em;
   }
 }
+
+#picks {
+  display: none;
+}
 </style>
 </head>
 <body class="site">
@@ -65,9 +70,11 @@ table td {
   <h1 class="title is-marginless is-size-5-touch">Color Cycle Survey</h1>
 </div>
 <div class="column">
-<div class="tags has-addons" style="justify-content: right;">
+<div id="picks">
+<div class="tags has-addons" style="justify-content: flex-end;">
   <span class="tag">Picks</span>
-  <span id="numPicks" class="tag is-primary">0</span>
+  <span id="numPicks" class="tag is-primary"></span>
+</div>
 </div>
 </div>
 </div>
@@ -462,7 +469,8 @@ const introductionDiv = document.querySelector('#introduction'),
     directionsDiv = document.querySelector('#directions'),
     setsDiv = document.querySelector('#sets'),
     cyclesDiv = document.querySelector('#cycles'),
-    picksDiv = document.querySelector('#numPicks');
+    picksDiv = document.querySelector('#picks'),
+    numPicksDiv = document.querySelector('#numPicks');
 function submit(orderPick) {
     let xhr = new XMLHttpRequest();
     xhr.responseType = 'json';
@@ -495,7 +503,8 @@ function submit(orderPick) {
             directionsDiv.style.display = 'none';
             cyclesDiv.style.display = 'none';
             setsDiv.style.display = 'inline';
-            picksDiv.textContent = xhr.response.Picks;
+            numPicksDiv.textContent = xhr.response.Picks;
+            picksDiv.style.display = 'inline';
         }
     }
     if (orderPick == -1) {
