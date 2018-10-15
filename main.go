@@ -90,14 +90,10 @@ func colors(w http.ResponseWriter, r *http.Request) {
 	// Find IP address of client
 	ip, _, _ := net.SplitHostPort(r.RemoteAddr)
 	fip := r.Header.Get("X-Forwarded-For")
-	ua := r.Header.Get("User-Agent")
 
 	// Truncate to avoid logging too much data
 	if len(fip) > 100 {
 		fip = fip[:100]
-	}
-	if len(ua) > 100 {
-		ua = ua[:100]
 	}
 
 	// Make sure user has answered questionnaire
@@ -120,6 +116,12 @@ func colors(w http.ResponseWriter, r *http.Request) {
 			if qr.Consent != "yes" {
 				http.Error(w, "No consent", http.StatusInternalServerError)
 				return
+			}
+
+			// Get user agent (and truncate)
+			ua := r.Header.Get("User-Agent")
+			if len(ua) > 100 {
+				ua = ua[:100]
 			}
 
 			// Validate answers
@@ -220,7 +222,7 @@ func colors(w http.ResponseWriter, r *http.Request) {
 				//log.Printf("Good match %s %s\n", flashes[0], csr.Set1 + ";" + csr.Set2)
 				//log.Println("Pick", csr.Pick)
 				zap.L().Info("pick", zap.String("id", session.Values["id"].(string)),
-					zap.String("ip", ip), zap.String("fip", fip), zap.String("ua", ua),
+					zap.String("ip", ip), zap.String("fip", fip),
 					zap.String("c1", csr.Set1), zap.String("c2", csr.Set2),
 					zap.String("o", csr.Orders), zap.Int("dm", csr.DrawMode),
 					zap.Int8("sp", sp), zap.Int8("cp", cp))
