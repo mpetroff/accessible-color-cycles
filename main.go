@@ -49,10 +49,12 @@ type ColorSetResponse struct {
 }
 
 type QuestionResponse struct {
-	Consent   string
-	Question1 string
-	Question2 string
-	Question3 string
+	Consent           string
+	Question1         string
+	Question2         string
+	Question3         string
+	WindowWidth       int
+	WindowOrientation string
 }
 
 func read_colors_csv(filename string) [][]string {
@@ -144,6 +146,13 @@ func colors(w http.ResponseWriter, r *http.Request) {
 				http.Error(w, "Invalid answer", http.StatusInternalServerError)
 				return
 			}
+			orientation := qr.WindowOrientation
+			if orientation != "l" && orientation != "p" {
+				zap.L().Info("badanswer", zap.String("ip", ip), zap.String("fip", fip),
+					zap.String("ua", ua), zap.String("n", "wo"))
+				http.Error(w, "Invalid answer", http.StatusInternalServerError)
+				return
+			}
 
 			// Create a random session ID
 			session.Values["id"] = strings.TrimRight(
@@ -156,8 +165,9 @@ func colors(w http.ResponseWriter, r *http.Request) {
 			// Log response
 			zap.L().Info("session", zap.String("id", session.Values["id"].(string)),
 				zap.String("ip", ip), zap.String("fip", fip), zap.String("ua", ua),
-				zap.String("consent", qr.Consent), zap.String("q1", qr.Question1),
-				zap.String("q2", qr.Question2), zap.String("q3", qr.Question3))
+				zap.String("consent", qr.Consent), zap.String("q1", q1),
+				zap.String("q2", q2), zap.String("q3", q3),
+				zap.Int("ww", qr.WindowWidth), zap.String("wo", orientation))
 		} else {
 			// Prompt for question answers
 			w.Header().Set("Content-Type", "text/json; charset=utf-8")

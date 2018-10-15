@@ -539,6 +539,8 @@ function submit(orderPick) {
             formData.append('Question2', 'dta');
         if (!formData.has('Question3'))
             formData.append('Question3', formData.get('Question2') == 'y' ? 'dta' : 'na');
+        formData.append('WindowWidth', Math.round(window.innerWidth / 100));
+        formData.append('WindowOrientation', window.innerWidth / window.innerHeight >= 1 ? 'l' : 'p');
         xhr.send(formData);
     } else {
         let formData = new FormData();
