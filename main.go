@@ -84,6 +84,19 @@ func new_session(w http.ResponseWriter, r *http.Request) {
 	session.Save(r, w)
 }
 
+func anonymize_ip(ip string) string {
+	pip := net.ParseIP(ip)
+	if pip.DefaultMask() != nil {
+		// IPv4
+		mask := net.CIDRMask(24, 32)
+		return pip.Mask(mask).String()
+	} else {
+		// IPv6
+		mask := net.CIDRMask(32, 128)
+		return pip.Mask(mask).String()
+	}
+}
+
 func colors(w http.ResponseWriter, r *http.Request) {
 	session, _ := store.Get(r, "survey")
 
@@ -91,10 +104,12 @@ func colors(w http.ResponseWriter, r *http.Request) {
 	ip, _, _ := net.SplitHostPort(r.RemoteAddr)
 	fip := r.Header.Get("X-Forwarded-For")
 
-	// Truncate to avoid logging too much data
-	if len(fip) > 100 {
-		fip = fip[:100]
-	}
+	// Only record client IP address at last proxy
+	fip = strings.SplitN(fip, ",", 1)[0]
+
+	// Anonymize IP addresses
+	ip = anonymize_ip(ip)
+	fip = anonymize_ip(fip)
 
 	// Make sure user has answered questionnaire
 	if init := session.Values["id"]; init == nil {
