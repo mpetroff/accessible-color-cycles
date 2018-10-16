@@ -232,7 +232,7 @@ func colors(w http.ResponseWriter, r *http.Request) {
 					zap.String("ip", ip), zap.String("fip", fip),
 					zap.String("c1", csr.Set1), zap.String("c2", csr.Set2),
 					zap.String("o", csr.Orders), zap.Int("dm", csr.DrawMode),
-					zap.Int8("sp", sp), zap.Int8("cp", cp))
+					zap.Int8("sp", sp), zap.Int8("cp", cp), zap.Int("np", picks))
 				picks += 1
 				session.Values["picks"] = picks
 			} else {
