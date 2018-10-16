@@ -50,9 +50,8 @@ type ColorSetResponse struct {
 
 type QuestionResponse struct {
 	Consent           string
-	Question1         string
-	Question2         string
-	Question3         string
+	ColorblindQ       string
+	ColorblindTypeQ   string
 	WindowWidth       int
 	WindowOrientation string
 }
@@ -140,26 +139,19 @@ func colors(w http.ResponseWriter, r *http.Request) {
 			}
 
 			// Validate answers
-			q1 := qr.Question1
-			if q1 != "y" && q1 != "n" && q1 != "dk" && q1 != "dta" {
+			cbq := qr.ColorblindQ
+			if cbq != "y" && cbq != "n" && cbq != "dk" && cbq != "dta" && cbq != "dna" {
 				zap.L().Info("badanswer", zap.String("ip", ip), zap.String("fip", fip),
-					zap.String("ua", ua), zap.Int("n", 1))
+					zap.String("ua", ua), zap.String("n", "cbq"))
 				http.Error(w, "Invalid answer", http.StatusInternalServerError)
 				return
 			}
-			q2 := qr.Question2
-			if q2 != "y" && q2 != "n" && q2 != "dk" && q2 != "dta" {
+			cbtq := qr.ColorblindTypeQ
+			if cbtq != "na" && cbtq != "dta" && cbtq != "dk" && cbtq != "dy" &&
+				cbtq != "py" && cbtq != "da" && cbtq != "pa" && cbtq != "ty" &&
+				cbtq != "ta" && cbtq != "m" && cbtq != "o" && cbtq != "dna" {
 				zap.L().Info("badanswer", zap.String("ip", ip), zap.String("fip", fip),
-					zap.String("ua", ua), zap.Int("n", 2))
-				http.Error(w, "Invalid answer", http.StatusInternalServerError)
-				return
-			}
-			q3 := qr.Question3
-			if q3 != "na" && q3 != "dta" && q3 != "dk" && q3 != "dy" &&
-				q3 != "py" && q3 != "da" && q3 != "pa" && q3 != "ty" &&
-				q3 != "ta" && q3 != "m" && q3 != "o" {
-				zap.L().Info("badanswer", zap.String("ip", ip), zap.String("fip", fip),
-					zap.String("ua", ua), zap.Int("n", 3))
+					zap.String("ua", ua), zap.String("n", "cbtq"))
 				http.Error(w, "Invalid answer", http.StatusInternalServerError)
 				return
 			}
@@ -182,8 +174,8 @@ func colors(w http.ResponseWriter, r *http.Request) {
 			// Log response
 			zap.L().Info("session", zap.String("id", session.Values["id"].(string)),
 				zap.String("ip", ip), zap.String("fip", fip), zap.String("ua", ua),
-				zap.String("consent", qr.Consent), zap.String("q1", q1),
-				zap.String("q2", q2), zap.String("q3", q3),
+				zap.String("consent", qr.Consent),
+				zap.String("cbq", cbq), zap.String("cbtq", cbtq),
 				zap.Int("ww", qr.WindowWidth), zap.String("wo", orientation))
 		} else {
 			// Prompt for question answers

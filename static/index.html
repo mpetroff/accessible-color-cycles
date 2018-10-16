@@ -134,37 +134,19 @@ table td {
           <p class="help">Taking a survey obviously requires data collection.</p>
         </div>
         <div class="field">
-          <label class="label">Do you have a Y chromosome?</label>
-          <div class="control">
-            <label class="radio">
-              <input type="radio" name="Question1" value="y">Yes
-            </label>
-            <label class="radio">
-              <input type="radio" name="Question1" value="n">No
-            </label>
-            <label class="radio">
-              <input type="radio" name="Question1" value="dk">Don&rsquo;t know
-            </label>
-            <label class="radio">
-              <input type="radio" name="Question1" value="dta">Decline to answer
-            </label>
-          </div>
-          <p class="help">This question is relevant to the genetics of colorblindness.</p>
-        </div>
-        <div class="field">
           <label class="label">Are you colorblind?</label>
           <div class="control">
             <label class="radio">
-              <input type="radio" name="Question2" value="y">Yes
+              <input type="radio" name="ColorblindQ" value="y">Yes
             </label>
             <label class="radio">
-              <input type="radio" name="Question2" value="n">No
+              <input type="radio" name="ColorblindQ" value="n">No
             </label>
             <label class="radio">
-              <input type="radio" name="Question2" value="dk">Don&rsquo;t know
+              <input type="radio" name="ColorblindQ" value="dk">Don&rsquo;t know
             </label>
             <label class="radio">
-              <input type="radio" name="Question2" value="dta">Decline to answer
+              <input type="radio" name="ColorblindQ" value="dta">Decline to answer
             </label>
           </div>
         </div>
@@ -172,7 +154,7 @@ table td {
           <label class="label">Type of colorblindness</label>
           <div class="control">
             <div class="select">
-              <select disabled id="colorblindnessSelect" name="Question3">
+              <select disabled id="colorblindnessSelect" name="ColorblindTypeQ">
                 <option value="na">Not applicable</option>
                 <option value="dta">Decline to answer</option>
                 <option value="dk">Don&rsquo;t know</option>
@@ -533,12 +515,10 @@ function submit(orderPick) {
             alert('You must consent to data collection to continue.');
             return;
         }
-        if (!formData.has('Question1'))
-            formData.append('Question1', 'dta');
-        if (!formData.has('Question2'))
-            formData.append('Question2', 'dta');
-        if (!formData.has('Question3'))
-            formData.append('Question3', formData.get('Question2') == 'y' ? 'dta' : 'na');
+        if (!formData.has('ColorblindQ'))
+            formData.append('ColorblindQ', 'dna');
+        if (!formData.has('ColorblindTypeQ'))
+            formData.append('ColorblindTypeQ', formData.get('ColorblindQ') == 'y' ? 'dna' : 'na');
         formData.append('WindowWidth', Math.round(window.innerWidth / 100));
         formData.append('WindowOrientation', window.innerWidth / window.innerHeight >= 1 ? 'l' : 'p');
         xhr.send(formData);
