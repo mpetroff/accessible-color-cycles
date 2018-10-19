@@ -137,6 +137,7 @@ document.querySelector('#directionsRead').addEventListener('click', function(e) 
 document.querySelector('#newSession').addEventListener('click', function(e) {
     e.preventDefault();
     let xhr = new XMLHttpRequest();
+    xhr.responseType = 'text';
     xhr.open('POST', '/colors/new');
     xhr.onreadystatechange = function() {
         if (xhr.readyState == XMLHttpRequest.DONE)
@@ -249,12 +250,12 @@ canvasIntro3.width = canvasIntro3.height = size;
 const ctxIntro1 = canvasIntro1.getContext('2d'),
     ctxIntro2 = canvasIntro2.getContext('2d'),
     ctxIntro3 = canvasIntro3.getContext('2d');
-const tab10 = ['#1f77b4', '#ff7f0e', '#2ca02c', '#d62728', '#9467bd',
-               '#8c564b', '#e377c2', '#7f7f7f', '#bcbd22', '#17becf'],
-    tab10deut100 = ['#456cb3', '#c4ae05', '#968838', '#8b7c1f', '#5d7bbb',
-                    '#6f684a', '#99a3bf', '#7f7f7f', '#ceb932', '#96a5cf'],
-    tab10prot100 = ['#5a79b7', '#a59100', '#a39119', '#615725', '#5279c0',
-                    '#635d4a', '#7c92c5', '#7f7f7f', '#cdb500', '#adb6d0'];
+const tab10 = ['1f77b4', 'ff7f0e', '2ca02c', 'd62728', '9467bd',
+               '8c564b', 'e377c2', '7f7f7f', 'bcbd22', '17becf'],
+    tab10deut100 = ['456cb3', 'c4ae05', '968838', '8b7c1f', '5d7bbb',
+                    '6f684a', '99a3bf', '7f7f7f', 'ceb932', '96a5cf'],
+    tab10prot100 = ['5a79b7', 'a59100', 'a39119', '615725', '5279c0',
+                    '635d4a', '7c92c5', '7f7f7f', 'cdb500', 'adb6d0'];
 drawLine(ctxIntro1, 4, tab10);
 drawLine(ctxIntro2, 4, tab10deut100);
 drawLine(ctxIntro3, 4, tab10prot100);
