@@ -23,14 +23,18 @@ import (
 	"gopkg.in/natefinch/lumberjack.v2"
 )
 
+// Initialize secure cookie store
 var (
+	// TODO: load from environment variable
 	// key must be 16, 24 or 32 bytes long (AES-128, AES-192 or AES-256)
 	key   = []byte("super-secret-key")
 	store = sessions.NewCookieStore(key)
 )
 
+// For decoding user responses
 var decoder = schema.NewDecoder()
 
+// For handling color set questions sent to user
 type ColorSetQuestion struct {
 	Set1     []string
 	Set2     []string
@@ -39,6 +43,7 @@ type ColorSetQuestion struct {
 	Picks    int
 }
 
+// For handling color set response from user
 type ColorSetResponse struct {
 	Set1      string
 	Set2      string
@@ -48,6 +53,7 @@ type ColorSetResponse struct {
 	OrderPick int8
 }
 
+// For handling questionnaire responses from user
 type QuestionResponse struct {
 	Consent           string
 	ColorblindQ       string
@@ -56,7 +62,8 @@ type QuestionResponse struct {
 	WindowOrientation string
 }
 
-func read_colors_csv(filename string) [][]string {
+// Reads and parses color sets file
+func read_colors_txt(filename string) [][]string {
 	csvFile, err := os.Open(filename)
 	if err != nil {
 		log.Fatal(err)
@@ -76,15 +83,18 @@ func read_colors_csv(filename string) [][]string {
 	return records
 }
 
-var color_sets = read_colors_csv("colors_mcd18_mld2_nc8_cvd100_minj40_maxj90_ns10000_hsv_sorted.txt")
+// Store parsed colors sets
+var color_sets = read_colors_txt("colors_mcd18_mld2_nc8_cvd100_minj40_maxj90_ns10000_hsv_sorted.txt")
 var len_color_sets = int32(len(color_sets))
 
+// Creates new user session for taking survey (deletes existing cookie)
 func new_session(w http.ResponseWriter, r *http.Request) {
 	session, _ := store.Get(r, "survey")
 	session.Options.MaxAge = -1
 	session.Save(r, w)
 }
 
+// Anonymize IP address by zeroing last bits
 func anonymize_ip(ip string) string {
 	pip := net.ParseIP(ip)
 	if pip.DefaultMask() != nil {
@@ -98,6 +108,7 @@ func anonymize_ip(ip string) string {
 	}
 }
 
+// Handle survey responses from user
 func colors(w http.ResponseWriter, r *http.Request) {
 	session, _ := store.Get(r, "survey")
 
