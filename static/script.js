@@ -1,7 +1,7 @@
 const colorblindnessSelect = document.querySelector('#colorblindnessSelect'),
     colorblindnessSelectNA = colorblindnessSelect.namedItem('na');
 document.addEventListener('DOMContentLoaded',function() {
-    document.querySelectorAll('input[name="Question2"]').forEach(function(e) {
+    document.querySelectorAll('input[name="ColorblindQ"]').forEach(function(e) {
         e.onchange=function(evt) {
             if (evt.target.value == 'y') {
                 colorblindnessSelect.remove(0);
@@ -62,7 +62,7 @@ function submit(orderPick) {
             numPicksDiv.textContent = xhr.response.Picks;
             picksDiv.style.display = 'inline';
         }
-    }
+    };
     if (orderPick == -1) {
         xhr.send();
     } else if (orderPick == -2) {
