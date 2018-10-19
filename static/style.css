@@ -1,0 +1,52 @@
+.cb {
+    width: 5rem;
+}
+.cbp:not(:last-child) {
+    margin-bottom: .25rem;
+}
+#cycles, #sets, #questions, #directions, #introduction {
+    display: none;
+}
+.tag-box {
+    display: flex;
+    justify-content: center;
+}
+
+.site {
+  display: flex;
+  min-height: 100vh;
+  flex-direction: column;
+}
+.site-content {
+  flex: 1;
+}
+.site-footer {
+  padding: 10px;
+  margin-top: 20px;
+}
+
+table td {
+  padding: .3em .2em;
+}
+
+@media (max-width: 1023px) {
+  .cb {
+    font-size: 0.75rem !important;
+  }
+  .cbp {
+    margin-bottom: 0 !important;
+  }
+  .card-content, .card-header-title, .card-footer-item {
+    padding: 0.5rem;
+  }
+  table td {
+    padding: 0 .2em;
+  }
+  .color-column {
+    padding-bottom: 0.25em;
+  }
+}
+
+#picks {
+  display: none;
+}
