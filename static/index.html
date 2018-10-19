@@ -522,8 +522,8 @@ function submit(orderPick) {
             orders = xhr.response.Orders;
             drawMode = xhr.response.DrawMode;
             for (let i = 0; i < 8; i++) {
-                document.querySelector('#s1c' + i).style.background = set1[i];
-                document.querySelector('#s2c' + i).style.background = set2[i];
+                document.querySelector('#s1c' + i).style.background = '#' + set1[i];
+                document.querySelector('#s2c' + i).style.background = '#' + set2[i];
             }
             ctx1.clearRect(0, 0, canvas1.width, canvas1.height);
             ctx2.clearRect(0, 0, canvas2.width, canvas2.height);
@@ -575,7 +575,7 @@ function cycles(pick) {
     const pickedSet = pick == 1 ? set1 : set2;
     for (let i = 1; i <= 4; i++) {
         for (let j = 0; j < 8; j++)
-            document.querySelector('#c' + i + 'c' + j).style.background = pickedSet[orders[i-1][j]];
+            document.querySelector('#c' + i + 'c' + j).style.background = '#' + pickedSet[orders[i-1][j]];
     }
     setsDiv.style.display = 'none';
     cyclesDiv.style.display = 'inline';
@@ -657,7 +657,7 @@ function drawScatter(ctx, radius, colors) {
     for (let i = 0; i < Math.min(colors.length, scatter_positions.length); i++) {
         let p = scatter_positions[i];
         ctx.beginPath();
-        ctx.fillStyle = colors[i];
+        ctx.fillStyle = '#' + colors[i];
         ctx.arc(p[0] * size, p[1] * size, radius, 0, 2 * Math.PI);
         ctx.fill();
     }
@@ -712,7 +712,7 @@ function drawLine(ctx, thickness, colors) {
     ctx.lineWidth = thickness;
     for (let i = 0; i < colors.length; i++) {
         ctx.beginPath();
-        ctx.strokeStyle = colors[i];
+        ctx.strokeStyle = '#' + colors[i];
         ctx.moveTo(0.05 * size, lines[colors.length][i][0] * (size - 10) + 5);
         for (let j = 1; j < 10; j++)
             ctx.lineTo((0.05 + j / 10) * size, lines[colors.length][i][j] * (size - 10) + 5);

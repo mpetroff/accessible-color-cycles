@@ -63,6 +63,8 @@ func read_colors_csv(filename string) [][]string {
 	}
 
 	r := csv.NewReader(csvFile)
+	r.Comma = ' '
+	r.Comment = '#'
 	r.TrimLeadingSpace = true
 	records, err := r.ReadAll()
 	if err != nil {
@@ -74,7 +76,7 @@ func read_colors_csv(filename string) [][]string {
 	return records
 }
 
-var color_sets = read_colors_csv("colors_hsv_sorted.csv")
+var color_sets = read_colors_csv("colors_mcd18_mld2_nc8_cvd100_minj40_maxj90_ns10000_hsv_sorted.txt")
 var len_color_sets = int32(len(color_sets))
 
 func new_session(w http.ResponseWriter, r *http.Request) {
