@@ -1,15 +1,15 @@
 .cb {
-    width: 5rem;
+  width: 5rem;
 }
 .cbp:not(:last-child) {
-    margin-bottom: .25rem;
+  margin-bottom: .25rem;
 }
 #cycles, #sets, #questions, #directions, #introduction {
-    display: none;
+  display: none;
 }
 .tag-box {
-    display: flex;
-    justify-content: center;
+  display: flex;
+  justify-content: center;
 }
 
 .site {
