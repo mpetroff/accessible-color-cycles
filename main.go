@@ -84,11 +84,11 @@ func read_colors_txt(filename string) [][]string {
 }
 
 // Store parsed color sets
-var color_sets_6 = read_colors_txt("colors_mcd20_mld2_nc6_cvd100_minj40_maxj90_ns10000_hsv_sorted.txt")
+var color_sets_6 = read_colors_txt("color-sets/colors_mcd20_mld2_nc6_cvd100_minj40_maxj90_ns10000_hsv_sorted.txt")
 var len_color_sets_6 = int32(len(color_sets_6))
-var color_sets_8 = read_colors_txt("colors_mcd18_mld2_nc8_cvd100_minj40_maxj90_ns10000_hsv_sorted.txt")
+var color_sets_8 = read_colors_txt("color-sets/colors_mcd18_mld2_nc8_cvd100_minj40_maxj90_ns10000_hsv_sorted.txt")
 var len_color_sets_8 = int32(len(color_sets_8))
-var color_sets_10 = read_colors_txt("colors_mcd16_mld2_nc10_cvd100_minj40_maxj90_ns10000_hsv_sorted.txt")
+var color_sets_10 = read_colors_txt("color-sets/colors_mcd16_mld2_nc10_cvd100_minj40_maxj90_ns10000_hsv_sorted.txt")
 var len_color_sets_10 = int32(len(color_sets_10))
 
 // Creates new user session for taking survey (deletes existing cookie)
