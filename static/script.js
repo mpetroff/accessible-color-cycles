@@ -12,7 +12,7 @@ const introductionDiv = document.querySelector('#introduction'),
     picksDiv = document.querySelector('#picks'),
     numPicksDiv = document.querySelector('#numPicks');
 
-// Handle enabling / disable colorblindness stype question in questionnaire
+// Handle enabling / disable colorblindness type question in questionnaire
 document.addEventListener('DOMContentLoaded', function() {
     const colorblindnessSelect = document.querySelector('#colorblindnessSelect'),
         colorblindnessSelectNA = colorblindnessSelect.item(0);
