@@ -296,8 +296,9 @@ func main() {
 	}
 
 	// Configure web server
-	http.HandleFunc("/colors", colors)
-	http.HandleFunc("/colors/new", new_session)
-	http.Handle("/", http.FileServer(http.Dir("static")))
-	http.ListenAndServe(":8080", context.ClearHandler(http.DefaultServeMux))
+	mux := http.NewServeMux()
+	mux.HandleFunc("/colors", colors)
+	mux.HandleFunc("/colors/new", new_session)
+	mux.Handle("/", http.FileServer(http.Dir("static")))
+	http.ListenAndServe(":8080", context.ClearHandler(mux))
 }
