@@ -1,8 +1,23 @@
-const colorblindnessSelect = document.querySelector('#colorblindnessSelect'),
-    colorblindnessSelectNA = colorblindnessSelect.namedItem('na');
-document.addEventListener('DOMContentLoaded',function() {
-    document.querySelectorAll('input[name="ColorblindQ"]').forEach(function(e) {
-        e.onchange=function(evt) {
+let set1,
+    set2,
+    orders,
+    drawMode,
+    setPick;
+
+const introductionDiv = document.querySelector('#introduction'),
+    questionsDiv = document.querySelector('#questions'),
+    directionsDiv = document.querySelector('#directions'),
+    setsDiv = document.querySelector('#sets'),
+    cyclesDiv = document.querySelector('#cycles'),
+    picksDiv = document.querySelector('#picks'),
+    numPicksDiv = document.querySelector('#numPicks');
+
+// Handle enabling / disable colorblindness stype question in questionnaire
+document.addEventListener('DOMContentLoaded', function() {
+    const colorblindnessSelect = document.querySelector('#colorblindnessSelect'),
+        colorblindnessSelectNA = colorblindnessSelect.item(0);
+    document.querySelectorAll('input[name="ColorblindQ"]').forEach(e => {
+        e.onchange = evt => {
             if (evt.target.value == 'y') {
                 colorblindnessSelect.remove(0);
                 colorblindnessSelect.disabled = false;
@@ -12,31 +27,29 @@ document.addEventListener('DOMContentLoaded',function() {
             }
         };
     });
-},false);
+
+    // Initialize page
+    submit(-1);
+});
 
 
-let set1,
-    set2,
-    orders,
-    drawMode,
-    setPick;
-const introductionDiv = document.querySelector('#introduction'),
-    questionsDiv = document.querySelector('#questions'),
-    directionsDiv = document.querySelector('#directions'),
-    setsDiv = document.querySelector('#sets'),
-    cyclesDiv = document.querySelector('#cycles'),
-    picksDiv = document.querySelector('#picks'),
-    numPicksDiv = document.querySelector('#numPicks');
+/**
+ * Handle submitting answers.
+ * @param {number} orderPick - For initialization, -1; for submitting
+ *  questionnaire, -2; else color cycle pick number
+ */
 function submit(orderPick) {
-    let xhr = new XMLHttpRequest();
+    const xhr = new XMLHttpRequest();
     xhr.responseType = 'json';
     xhr.open(orderPick == -1 ? 'GET' : 'POST', '/colors');
     xhr.onreadystatechange = function() {
         if (xhr.readyState == XMLHttpRequest.DONE && xhr.status == 200) {
             if (xhr.response.Question) {
+                // User has not yet started survey, so show introduction
                 introductionDiv.style.display = 'inline';
                 return;
             }
+            // User is continuing survey, so display next color set choice
             set1 = xhr.response.Set1;
             set2 = xhr.response.Set2;
             orders = xhr.response.Orders;
@@ -48,11 +61,11 @@ function submit(orderPick) {
             ctx1.clearRect(0, 0, canvas1.width, canvas1.height);
             ctx2.clearRect(0, 0, canvas2.width, canvas2.height);
             if (drawMode < 2) {
-                let s = drawMode == 0 ? 4 : 8;
+                const s = drawMode == 0 ? 4 : 8;
                 drawScatter(ctx1, s, set1);
                 drawScatter(ctx2, s, set2);
             } else {
-                let s = drawMode == 2 ? 2 : 4;
+                const s = drawMode == 2 ? 2 : 4;
                 drawLine(ctx1, s, set1);
                 drawLine(ctx2, s, set2);
             }
@@ -64,9 +77,11 @@ function submit(orderPick) {
         }
     };
     if (orderPick == -1) {
+        // Initialize page (GET request)
         xhr.send();
     } else if (orderPick == -2) {
-        let formData = new FormData(document.querySelector('#questionnaire'));
+        // Send questionnaire responses
+        const formData = new FormData(document.querySelector('#questionnaire'));
         if (!formData.has('Consent')) {
             alert('You must consent to data collection to continue.');
             return;
@@ -79,7 +94,8 @@ function submit(orderPick) {
         formData.append('WindowOrientation', window.innerWidth / window.innerHeight >= 1 ? 'l' : 'p');
         xhr.send(formData);
     } else {
-        let formData = new FormData();
+        // Send color set / cycle picks
+        const formData = new FormData();
         formData.append('Set1', set1);
         formData.append('Set2', set2);
         formData.append('Orders', orders);
@@ -90,38 +106,43 @@ function submit(orderPick) {
     }
 }
 
+/**
+ * Display color cycle options.
+ * @param {number} pick - Color set pick
+ */
 function cycles(pick) {
     setPick = pick;
     const pickedSet = pick == 1 ? set1 : set2;
-    for (let i = 1; i <= 4; i++) {
+    for (let i = 1; i <= 4; i++)
         for (let j = 0; j < 8; j++)
             document.querySelector('#c' + i + 'c' + j).style.background = '#' + pickedSet[orders[i-1][j]];
-    }
     setsDiv.style.display = 'none';
     cyclesDiv.style.display = 'inline';
 }
 
+// Initialize click handlers for answering survey
 for (let i = 1; i <= 2; i++) {
-    document.querySelector('#pickset' + i).addEventListener('click', function(e) {
+    document.querySelector('#pickset' + i).addEventListener('click', e => {
         e.preventDefault();
         cycles(i);
     });
 }
 for (let i = 1; i <= 4; i++) {
-    document.querySelector('#pickcycle' + i).addEventListener('click', function(e) {
+    document.querySelector('#pickcycle' + i).addEventListener('click', e => {
         e.preventDefault();
         submit(i);
     });
 }
 
-document.querySelector('#introductionRead').addEventListener('click', function(e) {
+// Initialize click handlers for starting survey
+document.querySelector('#introductionRead').addEventListener('click', e => {
     e.preventDefault();
     introductionDiv.style.display = 'none';
     questionsDiv.style.display = 'inline';
 });
-document.querySelector('#submitAnswers').addEventListener('click', function(e) {
+document.querySelector('#submitAnswers').addEventListener('click', e => {
     e.preventDefault();
-    let formData = new FormData(document.querySelector('#questionnaire'));
+    const formData = new FormData(document.querySelector('#questionnaire'));
     if (!formData.has('Consent')) {
         alert('You must consent to data collection to continue.');
         return;
@@ -129,14 +150,15 @@ document.querySelector('#submitAnswers').addEventListener('click', function(e) {
     questionsDiv.style.display = 'none';
     directionsDiv.style.display = 'inline';
 });
-document.querySelector('#directionsRead').addEventListener('click', function(e) {
+document.querySelector('#directionsRead').addEventListener('click', e => {
     e.preventDefault();
     submit(-2);
 });
 
-document.querySelector('#newSession').addEventListener('click', function(e) {
+// Initialize click handler for creating new survey session
+document.querySelector('#newSession').addEventListener('click', e => {
     e.preventDefault();
-    let xhr = new XMLHttpRequest();
+    const xhr = new XMLHttpRequest();
     xhr.responseType = 'text';
     xhr.open('POST', '/colors/new');
     xhr.onreadystatechange = function() {
@@ -148,17 +170,22 @@ document.querySelector('#newSession').addEventListener('click', function(e) {
 
 
 
+//
+// Functions for rendering color set visualizations
+//
 
+// Dimensions of visualizations
+const size = 200;
 
-let size = 200;
-
-let canvas1 = document.getElementById('canvas1');
+// Initialize canvases
+const canvas1 = document.getElementById('canvas1');
 canvas1.width = canvas1.height = size;
-let ctx1 = canvas1.getContext('2d');
-let canvas2 = document.getElementById('canvas2');
+const ctx1 = canvas1.getContext('2d');
+const canvas2 = document.getElementById('canvas2');
 canvas2.width = canvas2.height = size;
-let ctx2 = canvas2.getContext('2d');
+const ctx2 = canvas2.getContext('2d');
 
+// List of point positions for scatter plot visualizations
 const scatter_positions = [
     [0.766, 0.204],
     [0.593, 0.488],
@@ -174,9 +201,15 @@ const scatter_positions = [
     [0.205, 0.263],
 ];
 
+/**
+ * Draw a scatter plot visualization.
+ * @param {CanvasRenderingContext2D} ctx - Canvas context
+ * @param {number} radius - Dot radius
+ * @param {Array} radius - Array of colors to draw
+ */
 function drawScatter(ctx, radius, colors) {
     for (let i = 0; i < Math.min(colors.length, scatter_positions.length); i++) {
-        let p = scatter_positions[i];
+        const p = scatter_positions[i];
         ctx.beginPath();
         ctx.fillStyle = '#' + colors[i];
         ctx.arc(p[0] * size, p[1] * size, radius, 0, 2 * Math.PI);
@@ -184,6 +217,7 @@ function drawScatter(ctx, radius, colors) {
     }
 }
 
+// Coordinates for drawing lines for line plot visualizations
 const lines = {
     5: [
         [ 0.188, 0.074, 0.046, 0.059, 0.137, 0.108, 0.117, 0.134, 0.162, 0.178],
@@ -229,6 +263,13 @@ const lines = {
         [ 0.94 , 0.981, 0.941, 0.929, 0.917, 0.937, 0.94 , 0.974, 0.972, 0.935]
     ]
 };
+
+/**
+ * Draw a line plot visualization.
+ * @param {CanvasRenderingContext2D} ctx - Canvas context
+ * @param {number} radius - Line thickness
+ * @param {Array} radius - Array of colors to draw
+ */
 function drawLine(ctx, thickness, colors) {
     ctx.lineWidth = thickness;
     for (let i = 0; i < colors.length; i++) {
@@ -241,6 +282,7 @@ function drawLine(ctx, thickness, colors) {
     }
 }
 
+// For drawing color cycle visualization for introduction
 const canvasIntro1 = document.getElementById('canvas-intro1'),
     canvasIntro2 = document.getElementById('canvas-intro2'),
     canvasIntro3 = document.getElementById('canvas-intro3');
@@ -259,5 +301,3 @@ const tab10 = ['1f77b4', 'ff7f0e', '2ca02c', 'd62728', '9467bd',
 drawLine(ctxIntro1, 4, tab10);
 drawLine(ctxIntro2, 4, tab10deut100);
 drawLine(ctxIntro3, 4, tab10prot100);
-
-submit(-1);
