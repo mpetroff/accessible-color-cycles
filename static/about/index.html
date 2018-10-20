@@ -5,8 +5,8 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 
 <link rel="apple-touch-icon" sizes="180x180" href="favicon180.png">
-<link rel="icon" sizes="192x192" href="favicon192.png">
-<link rel="icon" type="image/png" href="favicon.png">
+<link rel="icon" sizes="192x192" href="../favicon192.png">
+<link rel="icon" type="image/png" href="../favicon.png">
 
 <title>About &amp; Privacy | Color Cycle Survey</title>
 <link rel="stylesheet" href="../bulma.min.css">
@@ -19,26 +19,50 @@
 <h1 class="title">Color Cycle Survey</h1>
 <h2 class="subtitle">About &amp; Privacy</h2>
 
-<p class="content">
-Something goes here...
+<p class="content has-text-justified has-text-left-mobile">
+A color cycle is an ordered set of colors used for plotting categorical data
+for visualization. Unfortunately, most existing color cycles are not
+colorblind-friendly. This survey was concieved out of frustration with this
+status quo, in particular with the default color cycle of the Matplotlib
+plotting library widely use in physics. The technical aspect of this can be
+resolved by enforcing minimum perceptual distances between colors, both for
+normal color vision and for various types of simulated color vision
+deficiencies, a technique that was also used by
+<a href="https://mpetroff.net/2018/03/color-cycle-picker/">an earlier effort</a>
+that created a colorblind-friendly
+<a href="https://colorcyclepicker.mpetroff.net/">color cycle picker</a>.
+</p><p class="content has-text-justified has-text-left-mobile">
+The above mentioned technique was used to randomly generate sets of color sets,
+which have minimum perceptual and lightness distances enforced (see
+<a href="#">this blog post</a> for details).
+However, this leaves the aesthetic aspect, which is where this survey comes in.
+The goal of this survey is to crowd-source the information needed to generate
+aesthetically pleasing color cycles that are also colorblind-friendly. Randomly
+generated color sets and cycles, which have a minimum perceptual distance
+enforced between colors, are presented for the user to choose the most pleasing
+one. This data will then be used to train a model to generate aesthetically
+pleasing color cycles. Additionally, once anonymized, the collected data will
+be released under a permissive license.
+</p><p class="content has-text-justified has-text-left-mobile">
+This survey is a project by <a href="https://mpetroff.net/">Matthew Petroff</a>.
 </p>
 
 
 <h3 class="title is-4">Cookies</h3>
 
-<p class="content">
+<p class="content has-text-justified has-text-left-mobile">
 A first party cookie is used but only for the data collection endpoint. It
 stores encrypted session information to allow for a stateless server
 implementation while preventing tampering, e.g. allowing someone to submit
 their preferred color cycle many times in an attempt to skew the results. The
-cookie is deleted when the user's browser is closed (at least for most
+cookie is deleted when the user&rsquo;s browser is closed (at least for most
 browsers).
 </p>
 
 
 <h3 class="title is-4">Data collected</h3>
 
-<p class="content">
+<p class="content has-text-justified has-text-left-mobile">
 The types of data collected are listed below, as are how they will be used.
 While an effort was made to ensure that this list is accurate, minor deviations
 may happen, should the need arise.
@@ -48,7 +72,7 @@ may happen, should the need arise.
 
 <h5 class="title is-6">Colorblindness information</h5>
 
-<p class="content">
+<p class="content has-text-justified has-text-left-mobile">
 Colorblindness information is collected to explore how color vision
 deficiencies affect how one rates color cycles. This session data will be
 publicly released. However, if any given category has fewer than 100 associated
@@ -57,7 +81,7 @@ sessions, it will be classified as &ldquo;other&rdquo; in the released data.
 
 <h4 class="title is-5">Survey responses</h4>
 
-<p class="content">
+<p class="content has-text-justified has-text-left-mobile">
 Survey response data will be publicly released and linked to the corresponding
 user session. For each response, this data includes the two color sets
 presented; the rendering mode used to present then, i.e. whether a line chart
@@ -71,14 +95,13 @@ far in the session.
 
 <h5 class="title is-6">IP address</h5>
 
-<p class="content">
+<p class="content has-text-justified has-text-left-mobile">
 The user&rsquo;s anonymized IP address is recorded for each request primarily
 to help filter out responses submitted by bad actors. It may also be used to
 derive a country code for each session. To anonymize the IP address, the last
 byte zeroed in the case of IPv4, and the last four bytes zeroed in the case of
 IPv6. The full IP address is not written to disk.
-</p>
-<p class="content">
+</p><p class="content has-text-justified has-text-left-mobile">
 No IP addresses will be publicly released. Derived country codes may be
 publicly released, linked to individual sessions. However, if any given country
 code has fewer than 100 associated sessions, it will be classified as
@@ -88,13 +111,12 @@ code has fewer than 100 associated sessions, it will be classified as
 
 <h5 class="title is-6">User agent</h5>
 
-<p class="content">
+<p class="content has-text-justified has-text-left-mobile">
 The user agent provided by the user&rsquo;s browser will be recorded for each
 session. This will be used to help filter out responses submitted by bad actors
 and to potentially help diagnose issues with certain browsers (and to filter
 out the data if need be).
-</p>
-<p class="content">
+</p><p class="content has-text-justified has-text-left-mobile">
 Browser type information for major browsers, e.g. Firefox or Chrome, associated
 with a session will be publicly released. Unusual browsers will be classified
 as &ldquo;other&rdquo; in the released data. Raw user agent information will
@@ -104,13 +126,12 @@ not be publicly released.
 
 <h5 class="title is-6">Window size</h5>
 
-<p class="content">
+<p class="content has-text-justified has-text-left-mobile">
 The browser window size rounded to the nearest 100&thinsp;px will be recorded
 at the start of each session, as will the window orientation, i.e. whether it
 is landscape orientation or portrait orientation. This information is recorded
 as it may prove useful during analysis of the survey results.
-</p>
-<p class="content">
+</p><p class="content has-text-justified has-text-left-mobile">
 Window size information will be used to categorize each session into a screen
 size category. These screen size classifications will be publicly released.
 </p>
