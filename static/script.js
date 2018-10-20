@@ -54,9 +54,16 @@ function submit(orderPick) {
             set2 = xhr.response.Set2;
             orders = xhr.response.Orders;
             drawMode = xhr.response.DrawMode;
-            for (let i = 0; i < 8; i++) {
-                document.querySelector('#s1c' + i).style.background = '#' + set1[i];
-                document.querySelector('#s2c' + i).style.background = '#' + set2[i];
+            for (let i = 0; i < 10; i++) {
+                const s1 = document.querySelector('#s1c' + i).style,
+                    s2 = document.querySelector('#s2c' + i).style;
+                if (i < set1.length) {
+                    s1.background = '#' + set1[i];
+                    s2.background = '#' + set2[i];
+                    s1.display = s2.display = 'inline-flex';
+                } else {
+                    s1.display = s2.display = 'none';
+                }
             }
             ctx1.clearRect(0, 0, canvas1.width, canvas1.height);
             ctx2.clearRect(0, 0, canvas2.width, canvas2.height);
@@ -114,8 +121,15 @@ function cycles(pick) {
     setPick = pick;
     const pickedSet = pick == 1 ? set1 : set2;
     for (let i = 1; i <= 4; i++)
-        for (let j = 0; j < 8; j++)
-            document.querySelector('#c' + i + 'c' + j).style.background = '#' + pickedSet[orders[i-1][j]];
+        for (let j = 0; j < 10; j++) {
+            const r = document.querySelector('#c' + i + 'r' + j).style;
+            if (j < pickedSet.length) {
+                document.querySelector('#c' + i + 'c' + j).style.background = '#' + pickedSet[orders[i-1][j]];
+                r.display = 'inline';
+            } else {
+                r.display = 'none';
+            }
+        }
     setsDiv.style.display = 'none';
     cyclesDiv.style.display = 'inline';
 }
