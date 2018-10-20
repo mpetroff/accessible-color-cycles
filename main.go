@@ -83,9 +83,13 @@ func read_colors_txt(filename string) [][]string {
 	return records
 }
 
-// Store parsed colors sets
-var color_sets = read_colors_txt("colors_mcd18_mld2_nc8_cvd100_minj40_maxj90_ns10000_hsv_sorted.txt")
-var len_color_sets = int32(len(color_sets))
+// Store parsed color sets
+var color_sets_6 = read_colors_txt("colors_mcd20_mld2_nc6_cvd100_minj40_maxj90_ns10000_hsv_sorted.txt")
+var len_color_sets_6 = int32(len(color_sets_6))
+var color_sets_8 = read_colors_txt("colors_mcd18_mld2_nc8_cvd100_minj40_maxj90_ns10000_hsv_sorted.txt")
+var len_color_sets_8 = int32(len(color_sets_8))
+var color_sets_10 = read_colors_txt("colors_mcd16_mld2_nc10_cvd100_minj40_maxj90_ns10000_hsv_sorted.txt")
+var len_color_sets_10 = int32(len(color_sets_10))
 
 // Creates new user session for taking survey (deletes existing cookie)
 func new_session(w http.ResponseWriter, r *http.Request) {
@@ -199,11 +203,22 @@ func colors(w http.ResponseWriter, r *http.Request) {
 	}
 
 	// Randomly pick two color sets
-	cycle1 := append([]string(nil), color_sets[rand.Int31n(len_color_sets)]...)
-	cycle2 := append([]string(nil), color_sets[rand.Int31n(len_color_sets)]...)
+	num_colors := 6 + rand.Intn(3) * 2
+	var cycle1 []string
+	var cycle2 []string
+    if num_colors == 6 {
+	    cycle1 = append([]string(nil), color_sets_6[rand.Int31n(len_color_sets_6)]...)
+	    cycle2 = append([]string(nil), color_sets_6[rand.Int31n(len_color_sets_6)]...)
+	} else if num_colors == 8 {
+	    cycle1 = append([]string(nil), color_sets_8[rand.Int31n(len_color_sets_8)]...)
+	    cycle2 = append([]string(nil), color_sets_8[rand.Int31n(len_color_sets_8)]...)
+	} else {
+	    cycle1 = append([]string(nil), color_sets_10[rand.Int31n(len_color_sets_10)]...)
+	    cycle2 = append([]string(nil), color_sets_10[rand.Int31n(len_color_sets_10)]...)
+	}
 
 	// Randomly generate four permutations
-	orders := [][]int{rand.Perm(8), rand.Perm(8), rand.Perm(8), rand.Perm(8)}
+	orders := [][]int{rand.Perm(num_colors), rand.Perm(num_colors), rand.Perm(num_colors), rand.Perm(num_colors)}
 	var ordersStr []string
 	for _, x := range orders {
 		ordersStr = append(ordersStr, strings.Trim(strings.Replace(fmt.Sprint(x), " ", "", -1), "[]"))
