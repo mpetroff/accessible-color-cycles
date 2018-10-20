@@ -60,7 +60,7 @@ function submit(orderPick) {
                 if (i < set1.length) {
                     s1.background = '#' + set1[i];
                     s2.background = '#' + set2[i];
-                    s1.display = s2.display = 'inline-flex';
+                    s1.display = s2.display = '';
                 } else {
                     s1.display = s2.display = 'none';
                 }
@@ -125,7 +125,7 @@ function cycles(pick) {
             const r = document.querySelector('#c' + i + 'r' + j).style;
             if (j < pickedSet.length) {
                 document.querySelector('#c' + i + 'c' + j).style.background = '#' + pickedSet[orders[i-1][j]];
-                r.display = 'inline';
+                r.display = '';
             } else {
                 r.display = 'none';
             }
