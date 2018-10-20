@@ -22,7 +22,7 @@
 <p class="content has-text-justified has-text-left-mobile">
 A color cycle is an ordered set of colors used for plotting categorical data
 for visualization. Unfortunately, most existing color cycles are not
-colorblind-friendly. This survey was concieved out of frustration with this
+colorblind-friendly. This survey was conceived out of frustration with this
 status quo, in particular with the default color cycle of the Matplotlib
 plotting library widely use in physics. The technical aspect of this can be
 resolved by enforcing minimum perceptual distances between colors, both for
@@ -134,6 +134,25 @@ as it may prove useful during analysis of the survey results.
 </p><p class="content has-text-justified has-text-left-mobile">
 Window size information will be used to categorize each session into a screen
 size category. These screen size classifications will be publicly released.
+</p>
+
+
+
+<h3 class="title is-4">Acknowledgments</h3>
+
+<p class="content has-text-justified has-text-left-mobile">
+This work makes use of the color vision deficiency simulation technique
+detailed in
+<a href="https://doi.org/10.1109/TVCG.2009.113">Machado et al. 2009</a> and the
+CAM02-UCS color space detailed in
+<a href="https://doi.org/10.1007/978-1-4419-6190-7_2">Luo &amp; Li 2013</a>.
+Color set generation made use of <a href="https://www.python.org/">Python</a>,
+<a href="https://numba.pydata.org/">Numba</a>, and
+<a href="https://colorspacious.readthedocs.io/">Colorspacious</a>. This survey
+makes use of <a href="https://bulma.io/">Bulma</a> on the front end and
+<a href="https://golang.org/">Go</a> on the backend (with
+<a href="https://www.gorillatoolkit.org/">Gorilla</a> and
+<a href="https://github.com/uber-go/zap">Zap</a>).
 </p>
 
 <a href="../" class="button is-primary is-medium">Back to survey</a>
