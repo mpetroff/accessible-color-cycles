@@ -1,0 +1,25 @@
+{
+  "name": "colorsurveyserver",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "build": "npm run build-uncss && npm run build-crass && npm run build-replacecss",
+    "build-uncss": "sed 's/<script src=\"script\\.js\"><\\/script>//g' static/index.src.html > static/index.nojs.html && uncss static/index.nojs.html static/about/index.html > static/uncss.css && rm static/index.nojs.html",
+    "build-crass": "crass static/uncss.css --optimize > static/style.min.css && rm static/uncss.css",
+    "build-replacecss": "sed 's/<link.*min.*>//g' static/index.src.html | sed 's/style\\.css/style\\.min\\.css/g' > static/index.html"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@bitbucket.org/mpetroff/colorsurveyserver.git"
+  },
+  "author": "",
+  "license": "MIT",
+  "homepage": "https://bitbucket.org/mpetroff/colorsurveyserver#readme",
+  "devDependencies": {
+    "bulma": "^0.7.2",
+    "bulma-divider": "^2.0.1",
+    "crass": "^0.12.3",
+    "uncss": "^0.16.2"
+  }
+}
