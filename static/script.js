@@ -189,15 +189,18 @@ document.querySelector('#newSession').addEventListener('click', e => {
 //
 
 // Dimensions of visualizations
-const size = 200;
+const size = 200,
+    dpr = window.devicePixelRatio || 1;
 
 // Initialize canvases
 const canvas1 = document.getElementById('canvas1');
-canvas1.width = canvas1.height = size;
+canvas1.width = canvas1.height = size * dpr;
 const ctx1 = canvas1.getContext('2d');
+ctx1.scale(dpr, dpr);
 const canvas2 = document.getElementById('canvas2');
-canvas2.width = canvas2.height = size;
+canvas2.width = canvas2.height = size * dpr;
 const ctx2 = canvas2.getContext('2d');
+ctx2.scale(dpr, dpr);
 
 // List of point positions for scatter plot visualizations
 const scatter_positions = [
@@ -287,12 +290,15 @@ function drawLine(ctx, thickness, colors) {
 const canvasIntro1 = document.getElementById('canvas-intro1'),
     canvasIntro2 = document.getElementById('canvas-intro2'),
     canvasIntro3 = document.getElementById('canvas-intro3');
-canvasIntro1.width = canvasIntro1.height = size;
-canvasIntro2.width = canvasIntro2.height = size;
-canvasIntro3.width = canvasIntro3.height = size;
+canvasIntro1.width = canvasIntro1.height = size * dpr;
+canvasIntro2.width = canvasIntro2.height = size * dpr;
+canvasIntro3.width = canvasIntro3.height = size * dpr;
 const ctxIntro1 = canvasIntro1.getContext('2d'),
     ctxIntro2 = canvasIntro2.getContext('2d'),
     ctxIntro3 = canvasIntro3.getContext('2d');
+ctxIntro1.scale(dpr, dpr);
+ctxIntro2.scale(dpr, dpr);
+ctxIntro3.scale(dpr, dpr);
 const tab10 = ['1f77b4', 'ff7f0e', '2ca02c', 'd62728', '9467bd',
                '8c564b', 'e377c2', '7f7f7f', 'bcbd22', '17becf'],
     tab10deut100 = ['456cb3', 'c4ae05', '968838', '8b7c1f', '5d7bbb',

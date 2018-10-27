@@ -50,3 +50,8 @@ table td {
 #picks {
   display: none;
 }
+
+canvas {
+  width: 200px;
+  height: 200px;
+}
