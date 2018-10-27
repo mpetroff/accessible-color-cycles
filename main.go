@@ -117,15 +117,11 @@ func colors(w http.ResponseWriter, r *http.Request) {
 	session, _ := store.Get(r, "survey")
 
 	// Find IP address of client
-	ip, _, _ := net.SplitHostPort(r.RemoteAddr)
-	fip := r.Header.Get("X-Forwarded-For")
-
-	// Only record client IP address at last proxy
-	fip = strings.SplitN(fip, ",", 1)[0]
+	//ip, _, _ := net.SplitHostPort(r.RemoteAddr)
+	ip := r.Header.Get("X-Real-IP")
 
 	// Anonymize IP addresses
 	ip = anonymize_ip(ip)
-	fip = anonymize_ip(fip)
 
 	// Make sure user has answered questionnaire
 	if init := session.Values["id"]; init == nil {
@@ -158,7 +154,7 @@ func colors(w http.ResponseWriter, r *http.Request) {
 			// Validate answers
 			cbq := qr.ColorblindQ
 			if cbq != "y" && cbq != "n" && cbq != "dk" && cbq != "dta" && cbq != "dna" {
-				zap.L().Info("badanswer", zap.String("ip", ip), zap.String("fip", fip),
+				zap.L().Info("badanswer", zap.String("ip", ip),
 					zap.String("ua", ua), zap.String("n", "cbq"))
 				http.Error(w, "Invalid answer", http.StatusInternalServerError)
 				return
@@ -167,14 +163,14 @@ func colors(w http.ResponseWriter, r *http.Request) {
 			if cbtq != "na" && cbtq != "dta" && cbtq != "dk" && cbtq != "dy" &&
 				cbtq != "py" && cbtq != "da" && cbtq != "pa" && cbtq != "ty" &&
 				cbtq != "ta" && cbtq != "m" && cbtq != "o" && cbtq != "dna" {
-				zap.L().Info("badanswer", zap.String("ip", ip), zap.String("fip", fip),
+				zap.L().Info("badanswer", zap.String("ip", ip),
 					zap.String("ua", ua), zap.String("n", "cbtq"))
 				http.Error(w, "Invalid answer", http.StatusInternalServerError)
 				return
 			}
 			orientation := qr.WindowOrientation
 			if orientation != "l" && orientation != "p" {
-				zap.L().Info("badanswer", zap.String("ip", ip), zap.String("fip", fip),
+				zap.L().Info("badanswer", zap.String("ip", ip),
 					zap.String("ua", ua), zap.String("n", "wo"))
 				http.Error(w, "Invalid answer", http.StatusInternalServerError)
 				return
@@ -190,7 +186,7 @@ func colors(w http.ResponseWriter, r *http.Request) {
 
 			// Log response
 			zap.L().Info("session", zap.String("id", session.Values["id"].(string)),
-				zap.String("ip", ip), zap.String("fip", fip), zap.String("ua", ua),
+				zap.String("ip", ip), zap.String("ua", ua),
 				zap.String("consent", qr.Consent),
 				zap.String("cbq", cbq), zap.String("cbtq", cbtq),
 				zap.Int("ww", qr.WindowWidth), zap.String("wo", orientation))
@@ -249,7 +245,7 @@ func colors(w http.ResponseWriter, r *http.Request) {
 		if flashes[0] != csr.Set1+";"+csr.Set2+";"+csr.Orders+";"+strconv.Itoa(csr.DrawMode) {
 			log.Printf("Bad match %s %s\n", flashes[0], csr.Set1+";"+csr.Set2+";"+csr.Orders+";"+strconv.Itoa(csr.DrawMode))
 			zap.L().Info("badmatch", zap.String("id", session.Values["id"].(string)),
-				zap.String("ip", ip), zap.String("fip", fip))
+				zap.String("ip", ip))
 		} else {
 			sp := csr.SetPick
 			cp := csr.OrderPick
@@ -257,7 +253,7 @@ func colors(w http.ResponseWriter, r *http.Request) {
 				//log.Printf("Good match %s %s\n", flashes[0], csr.Set1 + ";" + csr.Set2)
 				//log.Println("Pick", csr.Pick)
 				zap.L().Info("pick", zap.String("id", session.Values["id"].(string)),
-					zap.String("ip", ip), zap.String("fip", fip),
+					zap.String("ip", ip),
 					zap.String("c1", csr.Set1), zap.String("c2", csr.Set2),
 					zap.String("o", csr.Orders), zap.Int("dm", csr.DrawMode),
 					zap.Int8("sp", sp), zap.Int8("cp", cp), zap.Int("np", picks))
@@ -265,7 +261,7 @@ func colors(w http.ResponseWriter, r *http.Request) {
 				session.Values["picks"] = picks
 			} else {
 				zap.L().Info("badpick", zap.String("id", session.Values["id"].(string)),
-					zap.String("ip", ip), zap.String("fip", fip))
+					zap.String("ip", ip))
 			}
 		}
 	}
