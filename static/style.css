@@ -30,17 +30,19 @@ table td {
 }
 
 @media (max-width: 1023px) {
-  .cb {
-    font-size: 0.75rem !important;
+  .cb, td span {
+    font-size: 0.5rem !important;
   }
   .cbp {
     margin-bottom: 0 !important;
+    line-height: 1.25rem;
   }
   .card-content, .card-header-title, .card-footer-item {
     padding: 0.5rem;
   }
   table td {
-    padding: 0 .2em;
+    padding: 0.1em 0.2em;
+    line-height: 0.75rem;
   }
   .color-column {
     padding-bottom: 0.25em;
