@@ -4,6 +4,7 @@ import (
 	"encoding/base32"
 	"encoding/csv"
 	"encoding/json"
+	"encoding/hex"
 	"fmt"
 	"log"
 	"math/rand"
@@ -25,9 +26,8 @@ import (
 
 // Initialize secure cookie store
 var (
-	// TODO: load from environment variable
-	// key must be 16, 24 or 32 bytes long (AES-128, AES-192 or AES-256)
-	key   = []byte("super-secret-key")
+	// Key must be 32 bytes long (AES-256)
+	key, key_err = hex.DecodeString(os.Getenv("SESSION_KEY"))
 	store = sessions.NewCookieStore(key)
 )
 
@@ -280,6 +280,14 @@ func colors(w http.ResponseWriter, r *http.Request) {
 }
 
 func main() {
+    // Make sure session key is loaded
+    if key_err != nil {
+		log.Fatal(key_err)
+	}
+	if len(key) != 32 {
+	    log.Fatal("Session key must be 32 bytes!")
+	}
+
 	// Seed PRNG with current time
 	rand.Seed(time.Now().UnixNano())
 
