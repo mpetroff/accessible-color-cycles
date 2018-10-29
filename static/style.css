@@ -57,3 +57,7 @@ canvas {
   width: 200px;
   height: 200px;
 }
+
+.is-divider-vertical {
+  margin: 2rem 1rem;
+}
