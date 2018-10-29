@@ -3,8 +3,8 @@ package main
 import (
 	"encoding/base32"
 	"encoding/csv"
-	"encoding/json"
 	"encoding/hex"
+	"encoding/json"
 	"fmt"
 	"log"
 	"math/rand"
@@ -28,7 +28,7 @@ import (
 var (
 	// Key must be 32 bytes long (AES-256)
 	key, key_err = hex.DecodeString(os.Getenv("SESSION_KEY"))
-	store = sessions.NewCookieStore(key)
+	store        = sessions.NewCookieStore(key)
 )
 
 // For decoding user responses
@@ -199,18 +199,18 @@ func colors(w http.ResponseWriter, r *http.Request) {
 	}
 
 	// Randomly pick two color sets
-	num_colors := 6 + rand.Intn(3) * 2
+	num_colors := 6 + rand.Intn(3)*2
 	var cycle1 []string
 	var cycle2 []string
-    if num_colors == 6 {
-	    cycle1 = append([]string(nil), color_sets_6[rand.Int31n(len_color_sets_6)]...)
-	    cycle2 = append([]string(nil), color_sets_6[rand.Int31n(len_color_sets_6)]...)
+	if num_colors == 6 {
+		cycle1 = append([]string(nil), color_sets_6[rand.Int31n(len_color_sets_6)]...)
+		cycle2 = append([]string(nil), color_sets_6[rand.Int31n(len_color_sets_6)]...)
 	} else if num_colors == 8 {
-	    cycle1 = append([]string(nil), color_sets_8[rand.Int31n(len_color_sets_8)]...)
-	    cycle2 = append([]string(nil), color_sets_8[rand.Int31n(len_color_sets_8)]...)
+		cycle1 = append([]string(nil), color_sets_8[rand.Int31n(len_color_sets_8)]...)
+		cycle2 = append([]string(nil), color_sets_8[rand.Int31n(len_color_sets_8)]...)
 	} else {
-	    cycle1 = append([]string(nil), color_sets_10[rand.Int31n(len_color_sets_10)]...)
-	    cycle2 = append([]string(nil), color_sets_10[rand.Int31n(len_color_sets_10)]...)
+		cycle1 = append([]string(nil), color_sets_10[rand.Int31n(len_color_sets_10)]...)
+		cycle2 = append([]string(nil), color_sets_10[rand.Int31n(len_color_sets_10)]...)
 	}
 
 	// Randomly generate four permutations
@@ -280,12 +280,12 @@ func colors(w http.ResponseWriter, r *http.Request) {
 }
 
 func main() {
-    // Make sure session key is loaded
-    if key_err != nil {
+	// Make sure session key is loaded
+	if key_err != nil {
 		log.Fatal(key_err)
 	}
 	if len(key) != 32 {
-	    log.Fatal("Session key must be 32 bytes!")
+		log.Fatal("Session key must be 32 bytes!")
 	}
 
 	// Seed PRNG with current time
