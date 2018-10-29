@@ -89,14 +89,21 @@ function submit(orderPick) {
     } else if (orderPick == -2) {
         // Send questionnaire responses
         const formData = new FormData(document.querySelector('#questionnaire'));
-        if (!formData.has('Consent')) {
+        if (!document.getElementsByName('Consent')[0].checked) {
             alert('You must consent to data collection to continue.');
             return;
         }
-        if (!formData.has('ColorblindQ'))
+        const cbq = document.getElementsByName('ColorblindQ');
+        if (!(cbq[0].checked && cbq[1].checked && cbq[2].checked && cbq[3].checked))
             formData.append('ColorblindQ', 'dna');
-        if (!formData.has('ColorblindTypeQ'))
-            formData.append('ColorblindTypeQ', formData.get('ColorblindQ') == 'y' ? 'dna' : 'na');
+        if (formData.has) {
+            if (!formData.has('ColorblindTypeQ'))
+                formData.append('ColorblindTypeQ', formData.get('ColorblindQ') == 'y' ? 'dna' : 'na');
+        } else {
+            // Microsoft Edge doesn't properly implement FormData...
+            if (document.querySelector('#colorblindnessSelect').disabled)
+                formData.append('ColorblindTypeQ', 'na');
+        }
         formData.append('WindowWidth', Math.round(window.innerWidth / 100));
         formData.append('WindowOrientation', window.innerWidth / window.innerHeight >= 1 ? 'l' : 'p');
         xhr.send(formData);
@@ -157,7 +164,7 @@ document.querySelector('#introductionRead').addEventListener('click', e => {
 document.querySelector('#submitAnswers').addEventListener('click', e => {
     e.preventDefault();
     const formData = new FormData(document.querySelector('#questionnaire'));
-    if (!formData.has('Consent')) {
+    if (!document.getElementsByName('Consent')[0].checked) {
         alert('You must consent to data collection to continue.');
         return;
     }
