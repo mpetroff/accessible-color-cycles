@@ -27,8 +27,8 @@ import (
 // Initialize secure cookie store
 var (
 	// Key must be 32 bytes long (AES-256)
-	key, key_err = hex.DecodeString(os.Getenv("SESSION_KEY"))
-	store        = sessions.NewCookieStore(key)
+	key, keyErr = hex.DecodeString(os.Getenv("SESSION_KEY"))
+	store       = sessions.NewCookieStore(key)
 )
 
 // For decoding user responses
@@ -63,7 +63,7 @@ type QuestionResponse struct {
 }
 
 // Reads and parses color sets file
-func read_colors_txt(filename string) [][]string {
+func readColorsTxt(filename string) [][]string {
 	csvFile, err := os.Open(filename)
 	if err != nil {
 		log.Fatal(err)
@@ -84,22 +84,22 @@ func read_colors_txt(filename string) [][]string {
 }
 
 // Store parsed color sets
-var color_sets_6 = read_colors_txt("color-sets/colors_mcd20_mld2_nc6_cvd100_minj40_maxj90_ns10000_hsv_sorted.txt")
-var len_color_sets_6 = int32(len(color_sets_6))
-var color_sets_8 = read_colors_txt("color-sets/colors_mcd18_mld2_nc8_cvd100_minj40_maxj90_ns10000_hsv_sorted.txt")
-var len_color_sets_8 = int32(len(color_sets_8))
-var color_sets_10 = read_colors_txt("color-sets/colors_mcd16_mld2_nc10_cvd100_minj40_maxj90_ns10000_hsv_sorted.txt")
-var len_color_sets_10 = int32(len(color_sets_10))
+var colorSets6 = readColorsTxt("color-sets/colors_mcd20_mld2_nc6_cvd100_minj40_maxj90_ns10000_hsv_sorted.txt")
+var lenColorSets6 = int32(len(colorSets6))
+var colorSets8 = readColorsTxt("color-sets/colors_mcd18_mld2_nc8_cvd100_minj40_maxj90_ns10000_hsv_sorted.txt")
+var lenColorSets8 = int32(len(colorSets8))
+var colorSets10 = readColorsTxt("color-sets/colors_mcd16_mld2_nc10_cvd100_minj40_maxj90_ns10000_hsv_sorted.txt")
+var lenColorSets10 = int32(len(colorSets10))
 
 // Creates new user session for taking survey (deletes existing cookie)
-func new_session(w http.ResponseWriter, r *http.Request) {
+func newSession(w http.ResponseWriter, r *http.Request) {
 	session, _ := store.Get(r, "survey")
 	session.Options.MaxAge = -1
 	session.Save(r, w)
 }
 
 // Anonymize IP address by zeroing last bits
-func anonymize_ip(ip string) string {
+func anonymizeIP(ip string) string {
 	pip := net.ParseIP(ip)
 	if pip.DefaultMask() != nil {
 		// IPv4
@@ -121,7 +121,7 @@ func colors(w http.ResponseWriter, r *http.Request) {
 	ip := r.Header.Get("X-Real-IP")
 
 	// Anonymize IP addresses
-	ip = anonymize_ip(ip)
+	ip = anonymizeIP(ip)
 
 	// Make sure user has answered questionnaire
 	if init := session.Values["id"]; init == nil {
@@ -208,11 +208,11 @@ func colors(w http.ResponseWriter, r *http.Request) {
 		session.Save(r, w)
 
 		// Encode JSON response with color cycles
-		flash_data := strings.Split(flashes[0].(string), ";")
-		drawMode, _ := strconv.Atoi(flash_data[3])
-		csq := ColorSetQuestion{strings.Split(flash_data[0], ","),
-			strings.Split(flash_data[1], ","),
-			strings.Split(flash_data[2], ","),
+		flashData := strings.Split(flashes[0].(string), ";")
+		drawMode, _ := strconv.Atoi(flashData[3])
+		csq := ColorSetQuestion{strings.Split(flashData[0], ","),
+			strings.Split(flashData[1], ","),
+			strings.Split(flashData[2], ","),
 			drawMode, session.Values["picks"].(int)}
 		w.Header().Set("Content-Type", "text/json; charset=utf-8")
 		if err := json.NewEncoder(w).Encode(csq); err != nil {
@@ -224,22 +224,22 @@ func colors(w http.ResponseWriter, r *http.Request) {
 	}
 
 	// Randomly pick two color sets
-	num_colors := 6 + rand.Intn(3)*2
+	numColors := 6 + rand.Intn(3)*2
 	var cycle1 []string
 	var cycle2 []string
-	if num_colors == 6 {
-		cycle1 = append([]string(nil), color_sets_6[rand.Int31n(len_color_sets_6)]...)
-		cycle2 = append([]string(nil), color_sets_6[rand.Int31n(len_color_sets_6)]...)
-	} else if num_colors == 8 {
-		cycle1 = append([]string(nil), color_sets_8[rand.Int31n(len_color_sets_8)]...)
-		cycle2 = append([]string(nil), color_sets_8[rand.Int31n(len_color_sets_8)]...)
+	if numColors == 6 {
+		cycle1 = append([]string(nil), colorSets6[rand.Int31n(lenColorSets6)]...)
+		cycle2 = append([]string(nil), colorSets6[rand.Int31n(lenColorSets6)]...)
+	} else if numColors == 8 {
+		cycle1 = append([]string(nil), colorSets8[rand.Int31n(lenColorSets8)]...)
+		cycle2 = append([]string(nil), colorSets8[rand.Int31n(lenColorSets8)]...)
 	} else {
-		cycle1 = append([]string(nil), color_sets_10[rand.Int31n(len_color_sets_10)]...)
-		cycle2 = append([]string(nil), color_sets_10[rand.Int31n(len_color_sets_10)]...)
+		cycle1 = append([]string(nil), colorSets10[rand.Int31n(lenColorSets10)]...)
+		cycle2 = append([]string(nil), colorSets10[rand.Int31n(lenColorSets10)]...)
 	}
 
 	// Randomly generate four permutations
-	orders := [][]int{rand.Perm(num_colors), rand.Perm(num_colors), rand.Perm(num_colors), rand.Perm(num_colors)}
+	orders := [][]int{rand.Perm(numColors), rand.Perm(numColors), rand.Perm(numColors), rand.Perm(numColors)}
 	var ordersStr []string
 	for _, x := range orders {
 		ordersStr = append(ordersStr, strings.Trim(strings.Replace(fmt.Sprint(x), " ", "", -1), "[]"))
@@ -303,8 +303,8 @@ func colors(w http.ResponseWriter, r *http.Request) {
 
 func main() {
 	// Make sure session key is loaded
-	if key_err != nil {
-		log.Fatal(key_err)
+	if keyErr != nil {
+		log.Fatal(keyErr)
 	}
 	if len(key) != 32 {
 		log.Fatal("Session key must be 32 bytes!")
@@ -339,7 +339,7 @@ func main() {
 	// Configure web server
 	mux := http.NewServeMux()
 	mux.HandleFunc("/colors", colors)
-	mux.HandleFunc("/colors/new", new_session)
+	mux.HandleFunc("/colors/new", newSession)
 	mux.Handle("/", http.FileServer(http.Dir("static")))
 	http.ListenAndServe(":8080", context.ClearHandler(mux))
 }
