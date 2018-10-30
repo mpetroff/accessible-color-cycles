@@ -198,6 +198,31 @@ func colors(w http.ResponseWriter, r *http.Request) {
 		}
 	}
 
+	// Retrieve previous information from cryptographically-signed cookie
+	flashes := session.Flashes()
+
+	// User reloaded page (present previous choices using cookie)
+	if r.Method == "GET" && len(flashes) > 0 {
+		// Save generated sets, permutations, and drawing mode in session
+		session.AddFlash(flashes[0])
+		session.Save(r, w)
+
+		// Encode JSON response with color cycles
+		flash_data := strings.Split(flashes[0].(string), ";")
+		drawMode, _ := strconv.Atoi(flash_data[3])
+		csq := ColorSetQuestion{strings.Split(flash_data[0], ","),
+			strings.Split(flash_data[1], ","),
+			strings.Split(flash_data[2], ","),
+			drawMode, session.Values["picks"].(int)}
+		w.Header().Set("Content-Type", "text/json; charset=utf-8")
+		if err := json.NewEncoder(w).Encode(csq); err != nil {
+			http.Error(w, "Error encoding JSON", http.StatusInternalServerError)
+			return
+		}
+
+		return
+	}
+
 	// Randomly pick two color sets
 	num_colors := 6 + rand.Intn(3)*2
 	var cycle1 []string
@@ -225,9 +250,6 @@ func colors(w http.ResponseWriter, r *http.Request) {
 
 	// Number of picks the user has made
 	picks := session.Values["picks"].(int)
-
-	// Retrieve previous information from cryptographically-signed cookie
-	flashes := session.Flashes()
 
 	// Parse, verify, and record response
 	if r.Method == "POST" && len(flashes) > 0 {
