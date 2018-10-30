@@ -315,3 +315,8 @@ const tab10 = ['1f77b4', 'ff7f0e', '2ca02c', 'd62728', '9467bd',
 drawLine(ctxIntro1, 4, tab10);
 drawLine(ctxIntro2, 4, tab10deut100);
 drawLine(ctxIntro3, 4, tab10prot100);
+
+// Show a message if something goes wrong
+window.onerror = () => {
+    alert('Something went wrong...')
+};
