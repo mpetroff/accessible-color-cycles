@@ -24,8 +24,8 @@ const pickCycleDivs = [
 document.addEventListener('DOMContentLoaded', function() {
     const colorblindnessSelect = document.querySelector('#colorblindnessSelect'),
         colorblindnessSelectNA = colorblindnessSelect.item(0);
-    document.querySelectorAll('input[name="ColorblindQ"]').forEach(e => {
-        e.onchange = evt => {
+    Array.apply(null, document.querySelectorAll('input[name="ColorblindQ"]')).forEach(function(e) {
+        e.onchange = function(evt) {
             if (evt.target.value == 'y') {
                 colorblindnessSelect.remove(0);
                 colorblindnessSelect.disabled = false;
@@ -48,20 +48,20 @@ document.addEventListener('DOMContentLoaded', function() {
  */
 function submit(orderPick) {
     const xhr = new XMLHttpRequest();
-    xhr.responseType = 'json';
     xhr.open(orderPick == -1 ? 'GET' : 'POST', '/colors');
     xhr.onreadystatechange = function() {
         if (xhr.readyState == XMLHttpRequest.DONE && xhr.status == 200) {
-            if (xhr.response.Question) {
+            const response = JSON.parse(xhr.response);
+            if (response.Question) {
                 // User has not yet started survey, so show introduction
                 introductionDiv.style.display = 'inline';
                 return;
             }
             // User is continuing survey, so display next color set choice
-            set1 = xhr.response.Set1;
-            set2 = xhr.response.Set2;
-            orders = xhr.response.Orders;
-            drawMode = xhr.response.DrawMode;
+            set1 = response.Set1;
+            set2 = response.Set2;
+            orders = response.Orders;
+            drawMode = response.DrawMode;
             for (let i = 0; i < 10; i++) {
                 const s1 = document.querySelector('#s1c' + i).style,
                     s2 = document.querySelector('#s2c' + i).style;
@@ -91,14 +91,14 @@ function submit(orderPick) {
                 pickCycleDivs[j].classList.remove('is-loading');
             }
             setsDiv.style.display = 'inline';
-            numPicksDiv.textContent = xhr.response.Picks;
+            numPicksDiv.textContent = response.Picks;
             picksDiv.style.display = 'inline';
-            if (xhr.response.Picks == 10 || xhr.response.Picks == 25 ||
-                (xhr.response.Picks > 0 && xhr.response.Picks % 50 == 0)) {
-                let msg = 'You&rsquo;ve submitted ' + xhr.response.Picks + ' responses! ';
-                if (xhr.response.Picks == 10)
+            if (response.Picks == 10 || response.Picks == 25 ||
+                (response.Picks > 0 && response.Picks % 50 == 0)) {
+                let msg = 'You&rsquo;ve submitted ' + response.Picks + ' responses! ';
+                if (response.Picks == 10)
                     msg += 'Please consider sharing this survey with your friends and colleagues.';
-                else if (xhr.response.Picks == 25)
+                else if (response.Picks == 25)
                     msg += 'Your contributions will hopefully help improve scientific visualization.';
                 else
                     msg += 'Thank you for your contribution.';
@@ -169,13 +169,13 @@ function cycles(pick) {
 
 // Initialize click handlers for answering survey
 for (let i = 1; i <= 2; i++) {
-    document.querySelector('#pickset' + i).addEventListener('click', e => {
+    document.querySelector('#pickset' + i).addEventListener('click', function(e) {
         e.preventDefault();
         cycles(i);
     });
 }
 for (let i = 0; i < 4; i++) {
-    pickCycleDivs[i].addEventListener('click', e => {
+    pickCycleDivs[i].addEventListener('click', function(e) {
         e.preventDefault();
         e.target.classList.add('is-loading');
         for (let j = 0; j < 4; j++)
@@ -185,12 +185,12 @@ for (let i = 0; i < 4; i++) {
 }
 
 // Initialize click handlers for starting survey
-document.querySelector('#introductionRead').addEventListener('click', e => {
+document.querySelector('#introductionRead').addEventListener('click', function(e) {
     e.preventDefault();
     introductionDiv.style.display = 'none';
     questionsDiv.style.display = 'inline';
 });
-document.querySelector('#submitAnswers').addEventListener('click', e => {
+document.querySelector('#submitAnswers').addEventListener('click', function(e) {
     e.preventDefault();
     const formData = new FormData(document.querySelector('#questionnaire'));
     if (!document.getElementsByName('Consent')[0].checked) {
@@ -200,17 +200,16 @@ document.querySelector('#submitAnswers').addEventListener('click', e => {
     questionsDiv.style.display = 'none';
     directionsDiv.style.display = 'inline';
 });
-document.querySelector('#directionsRead').addEventListener('click', e => {
+document.querySelector('#directionsRead').addEventListener('click', function(e) {
     e.preventDefault();
     e.target.classList.add('is-loading');
     submit(-2);
 });
 
 // Initialize click handler for creating new survey session
-document.querySelector('#newSession').addEventListener('click', e => {
+document.querySelector('#newSession').addEventListener('click', function(e) {
     e.preventDefault();
     const xhr = new XMLHttpRequest();
-    xhr.responseType = 'text';
     xhr.open('POST', '/colors/new');
     xhr.onreadystatechange = function() {
         if (xhr.readyState == XMLHttpRequest.DONE)
@@ -347,6 +346,6 @@ drawLine(ctxIntro2, 4, tab10deut100);
 drawLine(ctxIntro3, 4, tab10prot100);
 
 // Show a message if something goes wrong
-window.onerror = () => {
+window.onerror = function() {
     alert('Something went wrong...')
 };
