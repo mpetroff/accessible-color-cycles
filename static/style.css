@@ -65,3 +65,35 @@ canvas {
 .message-body {
   padding: 0.5em 1em;
 }
+
+/* uncss:ignore start */
+.card-footer-item.is-loading {
+  position: relative;
+  pointer-events: none;
+  opacity: 0.5;
+  visibility: hidden;
+}
+.card-footer-item.is-loading:after {
+  animation: spinAround 500ms infinite linear;
+  border: 2px solid rgba(0, 0, 0, 0.7);
+  border-radius: 290486px;
+  border-right-color: transparent;
+  border-top-color: transparent;
+  content: "";
+  display: block;
+  position: absolute;
+  top: calc(50% - 0.5em);
+  left: calc(50% - 0.5em);
+  width: 1em;
+  height: 1em;
+  visibility: visible;
+}
+.card-footer-item[disabled] {
+  pointer-events: none;
+  opacity: 0.5;
+}
+.button.is-loading:after {
+    left: calc(50% - 0.5em);
+    top: calc(50% - 0.5em);
+}
+/* uncss:ignore end */

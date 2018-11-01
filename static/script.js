@@ -13,6 +13,13 @@ const introductionDiv = document.querySelector('#introduction'),
     numPicksDiv = document.querySelector('#numPicks'),
     messageElem = document.querySelector('#message');
 
+const pickCycleDivs = [
+    document.querySelector('#pickcycle1'),
+    document.querySelector('#pickcycle2'),
+    document.querySelector('#pickcycle3'),
+    document.querySelector('#pickcycle4')
+];
+
 // Handle enabling / disable colorblindness type question in questionnaire
 document.addEventListener('DOMContentLoaded', function() {
     const colorblindnessSelect = document.querySelector('#colorblindnessSelect'),
@@ -79,6 +86,10 @@ function submit(orderPick) {
             }
             directionsDiv.style.display = 'none';
             cyclesDiv.style.display = 'none';
+            for (let j = 0; j < 4; j++) {
+                pickCycleDivs[j].removeAttribute('disabled');
+                pickCycleDivs[j].classList.remove('is-loading');
+            }
             setsDiv.style.display = 'inline';
             numPicksDiv.textContent = xhr.response.Picks;
             picksDiv.style.display = 'inline';
@@ -163,9 +174,12 @@ for (let i = 1; i <= 2; i++) {
         cycles(i);
     });
 }
-for (let i = 1; i <= 4; i++) {
-    document.querySelector('#pickcycle' + i).addEventListener('click', e => {
+for (let i = 0; i < 4; i++) {
+    pickCycleDivs[i].addEventListener('click', e => {
         e.preventDefault();
+        e.target.classList.add('is-loading');
+        for (let j = 0; j < 4; j++)
+            pickCycleDivs[j].setAttribute('disabled', true);
         submit(i);
     });
 }
@@ -188,6 +202,7 @@ document.querySelector('#submitAnswers').addEventListener('click', e => {
 });
 document.querySelector('#directionsRead').addEventListener('click', e => {
     e.preventDefault();
+    e.target.classList.add('is-loading');
     submit(-2);
 });
 
