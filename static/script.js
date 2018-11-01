@@ -10,7 +10,8 @@ const introductionDiv = document.querySelector('#introduction'),
     setsDiv = document.querySelector('#sets'),
     cyclesDiv = document.querySelector('#cycles'),
     picksDiv = document.querySelector('#picks'),
-    numPicksDiv = document.querySelector('#numPicks');
+    numPicksDiv = document.querySelector('#numPicks'),
+    messageElem = document.querySelector('#message');
 
 // Handle enabling / disable colorblindness type question in questionnaire
 document.addEventListener('DOMContentLoaded', function() {
@@ -81,6 +82,19 @@ function submit(orderPick) {
             setsDiv.style.display = 'inline';
             numPicksDiv.textContent = xhr.response.Picks;
             picksDiv.style.display = 'inline';
+            if (xhr.response.Picks == 10 || xhr.response.Picks == 25 || xhr.response.Picks % 50 == 0) {
+                let msg = 'You&rsquo;ve submitted ' + xhr.response.Picks + ' responses! ';
+                if (xhr.response.Picks == 10)
+                    msg += 'Please consider sharing this survey with your friends and colleagues.';
+                else if (xhr.response.Picks == 25)
+                    msg += 'Your contributions will hopefully help improve scientific visualization.';
+                else
+                    msg += 'Thank you for your contribution.';
+                document.querySelector('#messageText').innerHTML = msg;
+                messageElem.style.display = 'block';
+            } else {
+                messageElem.style.display = 'none';
+            }
         }
     };
     if (orderPick == -1) {
