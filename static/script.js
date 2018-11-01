@@ -189,6 +189,7 @@ document.querySelector('#introductionRead').addEventListener('click', function(e
     e.preventDefault();
     introductionDiv.style.display = 'none';
     questionsDiv.style.display = 'inline';
+    window.scrollTo(0, 0);
 });
 document.querySelector('#submitAnswers').addEventListener('click', function(e) {
     e.preventDefault();
@@ -199,11 +200,13 @@ document.querySelector('#submitAnswers').addEventListener('click', function(e) {
     }
     questionsDiv.style.display = 'none';
     directionsDiv.style.display = 'inline';
+    window.scrollTo(0, 0);
 });
 document.querySelector('#directionsRead').addEventListener('click', function(e) {
     e.preventDefault();
     e.target.classList.add('is-loading');
     submit(-2);
+    window.scrollTo(0, 0);
 });
 
 // Initialize click handler for creating new survey session
