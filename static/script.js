@@ -82,7 +82,8 @@ function submit(orderPick) {
             setsDiv.style.display = 'inline';
             numPicksDiv.textContent = xhr.response.Picks;
             picksDiv.style.display = 'inline';
-            if (xhr.response.Picks == 10 || xhr.response.Picks == 25 || xhr.response.Picks % 50 == 0) {
+            if (xhr.response.Picks == 10 || xhr.response.Picks == 25 ||
+                (xhr.response.Picks > 0 && xhr.response.Picks % 50 == 0)) {
                 let msg = 'You&rsquo;ve submitted ' + xhr.response.Picks + ' responses! ';
                 if (xhr.response.Picks == 10)
                     msg += 'Please consider sharing this survey with your friends and colleagues.';
