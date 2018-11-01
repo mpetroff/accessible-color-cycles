@@ -75,8 +75,9 @@ browsers).
 
 <p class="content has-text-justified has-text-left-mobile">
 Web server logs will be kept for security and traffic analysis purposes. These
-logs are recorded separately from the survey data. They may contains IP
-addresses and other request header information.
+logs are recorded separately from the survey data. They may contains
+timestamps, IP addresses, and various request header information. They will not
+be publicly released.
 </p>
 
 
@@ -107,7 +108,8 @@ user session. For each response, these data include the two color sets
 presented; the rendering mode used to present then, i.e. whether a line chart
 of scatter plot was displayed; the color set picked; the four color cycles
 presented; the color cycle picked; and the number of color cycle responses so
-far in the session.
+far in the session. A timestamp will also be recorded with each response, but
+these timestamps will not be publicly released.
 </p>
 
 
@@ -122,10 +124,11 @@ derive a country code for each session. To anonymize the IP address, the last
 byte is zeroed in the case of IPv4, and the last four bytes are zeroed in the
 case of IPv6. The full IP address is not written to disk with survey data.
 </p><p class="content has-text-justified has-text-left-mobile">
-No IP addresses will be publicly released. Derived country codes may be
-publicly released, linked to individual sessions. However, if any given country
-code has fewer than 100 associated sessions, it will be classified as
-&ldquo;other&rdquo; in the released data.
+No IP addresses will be publicly released. Derived country codes or other
+derived location information may be publicly released, linked to individual
+sessions. However, if any given country code or location has fewer than 100
+associated sessions, it will be classified as &ldquo;other&rdquo; in the
+released data.
 </p>
 
 
@@ -168,7 +171,8 @@ CAM02-UCS color space detailed in
 Color set generation made use of <a href="https://www.python.org/">Python</a>,
 <a href="https://numba.pydata.org/">Numba</a>, and
 <a href="https://colorspacious.readthedocs.io/">Colorspacious</a>. This survey
-makes use of <a href="https://bulma.io/">Bulma</a> on the front end and
+makes use of <a href="https://bulma.io/">Bulma</a> on the front end (with
+<a href="https://github.com/Wikiki/bulma-divider">an extension</a>) and
 <a href="https://golang.org/">Go</a> on the back end (with
 <a href="https://www.gorillatoolkit.org/">Gorilla</a> and
 <a href="https://github.com/uber-go/zap">Zap</a>).
