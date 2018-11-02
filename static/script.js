@@ -73,8 +73,8 @@ function submit(orderPick) {
                     s1.display = s2.display = 'none';
                 }
             }
-            ctx1.clearRect(0, 0, canvas1.width, canvas1.height);
-            ctx2.clearRect(0, 0, canvas2.width, canvas2.height);
+            ctx1.clearRect(0, 0, canvasElem1.width, canvasElem1.height);
+            ctx2.clearRect(0, 0, canvasElem2.width, canvasElem2.height);
             if (drawMode < 2) {
                 const s = drawMode == 0 ? 4 : 8;
                 drawScatter(ctx1, s, set1);
@@ -232,13 +232,13 @@ const size = 200,
     dpr = window.devicePixelRatio || 1;
 
 // Initialize canvases
-const canvas1 = document.getElementById('canvas1');
-canvas1.width = canvas1.height = size * dpr;
-const ctx1 = canvas1.getContext('2d');
+const canvasElem1 = document.getElementById('canvas1');
+canvasElem1.width = canvasElem1.height = size * dpr;
+const ctx1 = canvasElem1.getContext('2d');
 ctx1.scale(dpr, dpr);
-const canvas2 = document.getElementById('canvas2');
-canvas2.width = canvas2.height = size * dpr;
-const ctx2 = canvas2.getContext('2d');
+const canvasElem2 = document.getElementById('canvas2');
+canvasElem2.width = canvasElem2.height = size * dpr;
+const ctx2 = canvasElem2.getContext('2d');
 ctx2.scale(dpr, dpr);
 
 // List of point positions for scatter plot visualizations
