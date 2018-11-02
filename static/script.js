@@ -120,7 +120,7 @@ function submit(orderPick) {
             return;
         }
         const cbq = document.getElementsByName('ColorblindQ');
-        if (!(cbq[0].checked && cbq[1].checked && cbq[2].checked && cbq[3].checked))
+        if (!(cbq[0].checked || cbq[1].checked || cbq[2].checked || cbq[3].checked))
             formData.append('ColorblindQ', 'dna');
         if (formData.has) {
             if (!formData.has('ColorblindTypeQ'))
