@@ -180,7 +180,7 @@ for (let i = 0; i < 4; i++) {
         e.target.classList.add('is-loading');
         for (let j = 0; j < 4; j++)
             pickCycleDivs[j].setAttribute('disabled', true);
-        submit(i);
+        submit(i + 1);
     });
 }
 
