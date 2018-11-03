@@ -10,13 +10,8 @@
     "build-replacecss": "sed 's/<link.*min.*>//g' static/index.src.html | sed 's/style\\.css/style\\.min\\.css/g' > static/index.html",
     "build-replacecss2": "sed 's/\\.\\.\\/node_modules\\/bulma\\/css\\/bulma/style/g' static/about/index.src.html > static/about/index.html"
   },
-  "repository": {
-    "type": "git",
-    "url": "git+ssh://git@bitbucket.org/mpetroff/colorsurveyserver.git"
-  },
   "author": "",
   "license": "MIT",
-  "homepage": "https://bitbucket.org/mpetroff/colorsurveyserver#readme",
   "devDependencies": {
     "bulma": "^0.7.2",
     "bulma-divider": "^2.0.1",
