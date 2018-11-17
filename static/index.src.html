@@ -95,9 +95,11 @@ See the <a href="/about/">about page</a> for more information.
       <p class="content has-text-justified has-text-left-mobile">
         A color cycle is an ordered set of colors used for plotting categorical
         data for visualization. Unfortunately, most existing color cycles are
-        not colorblind-friendly. The technical aspect of this can be resolved
-        by enforcing minimum perceptual distances between colors, both for
-        normal color vision and for various types of simulated
+        not colorblind-friendly. This is an issue since a significant fraction
+        of those viewing a particular plot may be colorblind, especially in
+        fields with diversity shortcomings. The technical aspect of this can be
+        resolved by enforcing minimum perceptual distances between colors, both
+        for normal color vision and for various types of simulated
         <a href="https://en.wikipedia.org/wiki/Color_blindness">color vision deficiencies</a>.
       </p><div class="card content">
         <header class="card-header">
@@ -272,6 +274,11 @@ See the <a href="/about/">about page</a> for more information.
       </div>
       </div>
       </div>
+      <p class="content">
+        Remember, the first few colors are the most important, since they will
+        be used more often, e.g. a plot with only two elements would only use
+        the first two colors in a given color cycle.
+      </p>
       <p class="content">
         This process will repeat ad infinitum (well, until you stop). If you 
         make a mistake, keep going; your browser&rsquo;s back button will not
