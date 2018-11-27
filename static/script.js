@@ -119,6 +119,10 @@ function submit(orderPick) {
             alert('You must consent to data collection to continue.');
             return;
         }
+        if (window.matchMedia && window.matchMedia('(inverted-colors: inverted)').matches) {
+            alert('You must turn off display color inversion to continue.');
+            return;
+        }
         const cbq = document.getElementsByName('ColorblindQ');
         if (!(cbq[0].checked || cbq[1].checked || cbq[2].checked || cbq[3].checked))
             formData.append('ColorblindQ', 'dna');
