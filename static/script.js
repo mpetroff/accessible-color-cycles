@@ -91,17 +91,15 @@ function submit(orderPick) {
                 pickCycleDivs[j].classList.remove('is-loading');
             }
             setsDiv.style.display = 'inline';
-            numPicksDiv.textContent = response.Picks;
+            numPicksDiv.textContent = response.Picks + ' / Infinity';
             picksDiv.style.display = 'inline';
-            if (response.Picks == 10 || response.Picks == 25 ||
-                (response.Picks > 0 && response.Picks % 50 == 0)) {
+            if (response.Picks == 10 || response.Picks == 15 ||
+                (response.Picks > 0 && response.Picks % 25 == 0)) {
                 let msg = 'You&rsquo;ve submitted ' + response.Picks + ' responses! ';
-                if (response.Picks == 10)
+                if (response.Picks == 15)
                     msg += 'Please consider sharing this survey with your friends and colleagues.';
-                else if (response.Picks == 25)
-                    msg += 'Your contributions will hopefully help improve scientific visualization.';
                 else
-                    msg += 'Thank you for your contribution.';
+                    msg += 'While this survey is infinite, feel free to stop at any time.'
                 document.querySelector('#messageText').innerHTML = msg;
                 messageElem.style.display = 'block';
             } else {
