@@ -224,7 +224,7 @@ func colors(w http.ResponseWriter, r *http.Request) {
 	}
 
 	// Randomly pick two color sets
-	numColors := 6 + rand.Intn(3)*2
+	numColors := 6 + rand.Intn(2)*2 // Don't use 10 colors
 	var cycle1 []string
 	var cycle2 []string
 	if numColors == 6 {
