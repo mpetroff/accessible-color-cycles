@@ -1,0 +1,14 @@
+# maxdistinct_nc11_cvd100_minj40_maxj90
+# Python 3.6.9 (default, Jan 26 2021, 15:33:00) [GCC 8.4.0]
+# NumPy 1.19.5, Numba 0.53.1
+ffffff 100.000
+0045fe 67.842
+9c3a00 61.792
+908e9e 37.467
+ffa100 36.117
+6c4b7d 24.183
+aacdff 23.521
+5990ff 22.626
+ff185a 21.280
+d3baaf 20.632
+25ff82 15.364
