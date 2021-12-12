@@ -90,7 +90,7 @@ The included color-vision-deficiency simulation and color-distance calculation i
 
 The `color-name-model/c3_data.json` file is from [C3 (Categorical Color Components)](https://github.com/StanfordHCI/c3/blob/d3576c7615ab0d6b2d81252a362599a9fd900d63/data/xkcd/c3_data.json), which is distributed under a [3-Clause BSD License](https://github.com/StanfordHCI/c3/blob/d3576c7615ab0d6b2d81252a362599a9fd900d63/LICENSE).
 
-The resulting data files (including, but not limited to, the final color cycles) are released into the public domain using the [CC0 1.0 Public Domain Dedication](https://creativecommons.org/publicdomain/zero/1.0/).
+The resulting data files (including, but not limited to, the final color cycles and the `survey-results/results.db` file) are released into the public domain using the [CC0 1.0 Public Domain Dedication](https://creativecommons.org/publicdomain/zero/1.0/).
 
 
 
