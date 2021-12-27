@@ -1,5 +1,8 @@
 # Creating accessible color cycles for data visualization
 
+[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.5806615.svg)](https://doi.org/10.5281/zenodo.5806615)
+[![arXiv](https://img.shields.io/badge/arXiv-2107.02270-red)](https://arxiv.org/abs/2107.02270)
+
 This code serves as a supplement to the paper titled _Accessible Color Sequences for Data Visualization_. It contains code for creating random color sets with a minimum perceptual distance enforced, for running a color-cycle aesthetic-preference survey, for creating a machine-learning aesthetic-preference model based on the survey results, and for creating final color cycles that balance accessibility with aesthetics. Additionally, it includes data resulting from the survey and the analysis.
 
 The analysis was performed under Ubuntu 18.04 on a dual-socket system with Intel Xeon E5-2690 v4 CPUs and a Python 3.6.9 virtual environment defined by the `requirements.txt` file (installed with `pip==21.1.1`, `setuptools==56.2.0`, `wheel==0.36.2`).
