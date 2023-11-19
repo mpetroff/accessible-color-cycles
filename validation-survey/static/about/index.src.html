@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en-US">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<link rel="icon" sizes="32x32" type="image/png" href="../favicon.png">
+<link rel="icon" sizes="196x196" type="image/png" href="../favicon196.png">
+<link rel="apple-touch-icon" sizes="180x180" type="image/png" href="../favicon180.png">
+
+<title>About &amp; Privacy | Color Cycle Survey</title>
+<link rel="stylesheet" href="../../node_modules/bulma/css/bulma.min.css">
+</head>
+<body>
+
+<section class="section">
+<div class="container">
+
+<h1 class="title">Color Cycle Survey</h1>
+<h2 class="subtitle">About &amp; Privacy</h2>
+
+<p class="content has-text-justified has-text-left-mobile">
+A color cycle is an ordered set of colors used for plotting categorical data
+for visualization. Unfortunately, most existing color cycles are not
+colorblind-friendly. This is an issue since a significant fraction of those
+viewing a particular plot may be colorblind, especially in fields with
+diversity shortcomings. This survey was conceived out of frustration with this
+status quo, in particular with the <a href="https://github.com/matplotlib/matplotlib/issues/9460">default color cycle</a> of the Matplotlib
+plotting library widely use in physics. The technical aspect of this can be
+resolved by enforcing minimum perceptual distances between colors, both for
+normal color vision and for various types of simulated
+<a href="https://en.wikipedia.org/wiki/Color_blindness">color vision deficiencies</a>,
+a technique that was also used by
+<a href="https://mpetroff.net/2018/03/color-cycle-picker/">an earlier effort</a>
+that created a colorblind-friendly
+<a href="https://colorcyclepicker.mpetroff.net/">color cycle picker</a>.
+</p><p class="content has-text-justified has-text-left-mobile">
+The above mentioned technique was used to randomly generate 10&thinsp;000 color
+sets each of six, eight, and ten color sets, which have minimum perceptual and
+lightness distances enforced (see <a href="https://mpetroff.net/2018/10/randomly-generating-color-sets-with-a-minimum-perceptual-distance/">this blog post</a> for details);
+full deuteranopia, protanopia, and tritanopia simulations were used.
+However, this leaves the aesthetic aspect, which is where this survey comes in.
+The goal of this survey is to crowd-source the information needed to generate
+aesthetically pleasing color cycles that are also colorblind-friendly. Randomly
+generated color sets and cycles, which have a minimum perceptual distance
+enforced between colors, are presented for the user to choose the most pleasing
+one. These data will then be used to train a model to generate aesthetically
+pleasing color cycles. Additionally, once anonymized, the collected data will
+be released under a permissive license.
+</p><p class="content has-text-justified has-text-left-mobile">
+This survey is a project by <a href="https://mpetroff.net/">Matthew Petroff</a>.
+</p>
+
+
+<h3 class="title is-4">Feedback</h3>
+
+<p class="content has-text-justified has-text-left-mobile">
+If you wish to provide feedback, please leave it on the
+<a href="https://github.com/mpetroff/color-cycle-survey/issues">issue tracker</a>
+or email it to colorcyclesurvey &#91;&#97;&#116;&#93;
+mpetroff &#91;&#100;&#111;&#116;&#93; net.
+</p>
+
+
+<h3 class="title is-4">Cookies</h3>
+
+<p class="content has-text-justified has-text-left-mobile">
+A first party cookie is used but only for the data collection endpoint. It
+stores encrypted session information to allow for a stateless server
+implementation while preventing tampering, e.g., preventing someone from submitting
+their preferred color cycle many times in an attempt to skew the results. The
+cookie is deleted when the user&rsquo;s browser is closed (at least for most
+browsers).
+</p>
+
+
+<h3 class="title is-4">Server logs</h3>
+
+<p class="content has-text-justified has-text-left-mobile">
+Web server logs will be kept for security and traffic analysis purposes. These
+logs are recorded separately from the survey data. They may contains
+timestamps, IP addresses, and various request header information. They will not
+be publicly released.
+</p>
+
+
+<h3 class="title is-4">Data collected with survey</h3>
+
+<p class="content has-text-justified has-text-left-mobile">
+The types of data collected are listed below, as are how they will be used.
+While an effort was made to ensure that this list is accurate, minor deviations
+may happen, should the need arise.
+</p>
+
+<h4 class="title is-5">Questionnaire responses</h4>
+
+<h5 class="title is-6">Colorblindness information</h5>
+
+<p class="content has-text-justified has-text-left-mobile">
+Colorblindness information is collected to explore how color vision
+deficiencies affect how one rates color cycles. These session data will be
+publicly released. However, if any given category has fewer than 100 associated
+sessions, it will be classified as &ldquo;other&rdquo; in the released data.
+</p>
+
+<h4 class="title is-5">Survey responses</h4>
+
+<p class="content has-text-justified has-text-left-mobile">
+Survey response data will be publicly released and linked to the corresponding
+user session. For each response, these data include the two color sets
+presented; the rendering mode used to present then, i.e., whether a line chart
+of scatter plot was displayed; the color set picked; the four color cycles
+presented; the color cycle picked; and the number of color cycle responses so
+far in the session. A timestamp will also be recorded with each response, but
+these timestamps will not be publicly released.
+</p>
+
+
+<h4 class="title is-5">Browser / network information</h4>
+
+<h5 class="title is-6">IP address</h5>
+
+<p class="content has-text-justified has-text-left-mobile">
+The user&rsquo;s anonymized IP address is recorded for each request primarily
+to help filter out responses submitted by bad actors. It may also be used to
+derive a country code for each session. To anonymize the IP address, the last
+byte is zeroed in the case of IPv4, and the last four bytes are zeroed in the
+case of IPv6. The full IP address is not written to disk with survey data.
+</p><p class="content has-text-justified has-text-left-mobile">
+No IP addresses will be publicly released. Derived country codes or other
+derived location information may be publicly released, linked to individual
+sessions. However, if any given country code or location has fewer than 100
+associated sessions, it will be classified as &ldquo;other&rdquo; in the
+released data.
+</p>
+
+
+<h5 class="title is-6">User agent</h5>
+
+<p class="content has-text-justified has-text-left-mobile">
+The user agent provided by the user&rsquo;s browser will be recorded for each
+session. This will be used to help filter out responses submitted by bad actors
+and to potentially help diagnose issues with certain browsers (and to filter
+out the data if need be).
+</p><p class="content has-text-justified has-text-left-mobile">
+Browser type information for major browsers, e.g., Firefox or Chrome, associated
+with a session will be publicly released. Unusual browsers will be classified
+as &ldquo;other&rdquo; in the released data. Raw user agent information will
+not be publicly released.
+</p>
+
+
+<h5 class="title is-6">Window size</h5>
+
+<p class="content has-text-justified has-text-left-mobile">
+The browser window size rounded to the nearest 100&thinsp;px will be recorded
+at the start of each session, as will the window orientation, i.e., whether it
+is landscape orientation or portrait orientation. This information is recorded
+as it may prove useful during analysis of the survey results.
+</p><p class="content has-text-justified has-text-left-mobile">
+Window size information will be used to categorize each session into a screen
+size category. These screen size classifications will be publicly released.
+</p>
+
+
+<h3 class="title is-4">Acknowledgments</h3>
+
+<p class="content has-text-justified has-text-left-mobile">
+This work makes use of the color vision deficiency simulation technique
+detailed in
+<a href="https://doi.org/10.1109/TVCG.2009.113">Machado et al. 2009</a> and the
+CAM02-UCS color space detailed in
+<a href="https://doi.org/10.1007/978-1-4419-6190-7_2">Luo &amp; Li 2013</a>.
+Color set generation made use of <a href="https://www.python.org/">Python</a>,
+<a href="https://numba.pydata.org/">Numba</a>, and
+<a href="https://colorspacious.readthedocs.io/">Colorspacious</a>. This survey
+makes use of <a href="https://bulma.io/">Bulma</a> on the front end (with
+<a href="https://github.com/Wikiki/bulma-divider">an extension</a>) and
+<a href="https://golang.org/">Go</a> on the back end (with
+<a href="https://www.gorillatoolkit.org/">Gorilla</a> and
+<a href="https://github.com/uber-go/zap">Zap</a>).
+</p>
+
+<a href="../" class="button is-info is-medium">Back to survey</a>
+
+</div>
+</section>
+
+</body>
+</html>

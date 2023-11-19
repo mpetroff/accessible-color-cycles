@@ -1,0 +1,21 @@
+{
+  "name": "colorsurveyserver",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "build": "npm run build-uncss && npm run build-crass && npm run build-replacecss && npm run build-replacecss2",
+    "build-uncss": "sed 's/<script src=\"script\\.js\"><\\/script>//g' static/index.src.html | sed 's/button is-info is-medium/button is-info is-medium is-loading/g'> static/index.nojs.html && uncss static/index.nojs.html static/about/index.src.html > static/uncss.css && rm static/index.nojs.html",
+    "build-crass": "crass static/uncss.css --optimize > static/style.min.css && rm static/uncss.css",
+    "build-replacecss": "sed 's/<link.*min.*>//g' static/index.src.html | sed 's/style\\.css/style\\.min\\.css/g' > static/index.html",
+    "build-replacecss2": "sed 's/\\.\\.\\/node_modules\\/bulma\\/css\\/bulma/style/g' static/about/index.src.html > static/about/index.html"
+  },
+  "author": "",
+  "license": "MIT",
+  "devDependencies": {
+    "bulma": "^0.7.2",
+    "bulma-divider": "^2.0.1",
+    "crass": "^0.12.3",
+    "uncss": "^0.16.2"
+  }
+}

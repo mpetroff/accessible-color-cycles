@@ -64,6 +64,16 @@ The `survey` directory contains the code used to run the color-cycle survey. The
 The `survey-results` directory contains the results of the color-cycle survey. The `parse-log.ipynb` notebook contains the code used to parse the survey results log file and contains summary statistics of the survey user sessions. The `results.db` SQLite database, which was created by the previously-mentioned notebook, contains the survey responses. To protect the privacy of the survey respondents, neither the log file used to create the results database nor the database's sessions table are included in this data release. Country codes were derived from partial IP addresses using the [2019-12-24 release](https://web.archive.org/web/20191227182412/https://geolite.maxmind.com/download/geoip/database/GeoLite2-Country.tar.gz) of the MaxMind GeoLite2 Country geolocation database. The SHA-256 hashes of the `results.log` and `GeoLite2-Country_20191224.mmdb` files (which are not included in this repository) are `4f4519dfb17e0cb459bb4f16d1656d46d893d56304c5ef7c136d81d851088cc8` and `9aedbe59990318581ec5d880716d3415e40bfc07280107112d6d7328c771e059`, respectively.
 
 
+### Validation survey
+
+The `validation-survey` directory contains the code used to run the validation survey, which was slightly tweaked from the main color-cycle survey code. The `main.go` file contains the server backend code, which records survey responses to a text-based log file. The static files for the survey's frontend can be regenerated using `npm run build`.
+
+
+### Validation survey results
+
+The `validation-survey-results` directory contains the results of the validation survey. The `parse-log.ipynb` notebook contains the code used to parse the survey results log file and contains summary statistics of the survey user sessions. The `results.db` SQLite database, which was created by the previously-mentioned notebook, contains the survey responses.
+
+
 ### Probabilistic color-name model
 
 The `color-name-model` directory contains a reanalysis of the probabilistic color-name model described in Heer & Stone (2012). The `post-process-heer-stone.ipynb` notebook contains this analysis, which finds and merges synonymous color names and eliminates rarely-used color names. The `colornamemodel.npz` file contains the data of the post-processed model.

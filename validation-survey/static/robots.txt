@@ -1,0 +1,3 @@
+User-Agent: *
+Disallow: /colors
+Disallow: /colors/new

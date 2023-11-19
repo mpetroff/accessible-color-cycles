@@ -1,0 +1,521 @@
+<!DOCTYPE html>
+<html lang="en-US">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<meta name="description" content="This survey seeks to collect the data needed
+  to create aesthetically pleasing, colorblind-friendly color cycles for data
+  visualization.">
+<meta name="author" content="Matthew Petroff">
+
+<meta property="og:title" content="Color Cycle Survey">
+<meta property="og:description" content="This survey seeks to collect the data
+  needed to create aesthetically pleasing, colorblind-friendly color cycles for
+  data visualization.">
+<meta property="og:image" content="https://colorcyclesurvey.mpetroff.net/social-preview.png">
+<meta property="og:image:alt" content="Category 10 color cycle rendered as a line chart">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="1200">
+<meta property="og:type" content="website">
+<meta property="og:url" content="https://colorcyclesurvey.mpetroff.net/">
+
+
+<meta name="twitter:card" content="summary">
+<meta name="twitter:site" content="@petroffm">
+<meta name="twitter:title" content="Color Cycle Survey">
+<meta name="twitter:description" content="This survey seeks to collect the data
+  needed to create aesthetically pleasing, colorblind-friendly color cycles for
+  data visualization.">
+<meta name="twitter:image" content="https://colorcyclesurvey.mpetroff.net/social-preview.png">
+<meta name="twitter:image:alt" content="Category 10 color cycle rendered as a line chart">
+
+<link rel="icon" sizes="32x32" type="image/png" href="favicon.png">
+<link rel="icon" sizes="196x196" type="image/png" href="favicon196.png">
+<link rel="apple-touch-icon" sizes="180x180" type="image/png" href="favicon180.png">
+
+<title>Color Cycle Survey</title>
+<link rel="stylesheet" href="../node_modules/bulma/css/bulma.min.css">
+<link rel="stylesheet" href="../node_modules/bulma-divider/dist/css/bulma-divider.min.css">
+<link rel="stylesheet" href="style.css">
+</head>
+<body class="site">
+
+<main class="site-content">
+<div style="height: 1rem;"></div>
+<div style="height: 2rem;" class="is-hidden-touch"></div>
+<div class="container" style="padding: 0 1rem;">
+
+<div class="columns is-vcentered is-mobile">
+<div class="column is-narrow">
+  <h1 class="title is-marginless is-size-5-touch">Color Cycle Survey</h1>
+</div>
+<div class="column">
+<div id="picks">
+<div class="tags has-addons" style="justify-content: flex-end;">
+  <span class="tag">Picks</span>
+  <span id="numPicks" class="tag is-primary"></span>
+</div>
+</div>
+</div>
+</div>
+
+
+<!-- Error message for no JavaScript -->
+<noscript>
+<p class="content">
+JavaScript is required for this survey.
+</p><p class="content">
+While it could have been implemented without client-side scripting, such
+scripting allowed for easier development and a simpler back end, which was
+deemed an acceptable trade-off for this ephemeral application.
+</p><p class="content">
+See the <a href="/about/">about page</a> for more information.
+</p>
+</noscript>
+
+
+<!-- Message -->
+<div class="message content is-primary" id="message">
+  <div class="message-body">
+    <strong>Reminder:</strong> <span id="messageText"></span>
+  </div>
+</div>
+
+
+<!-- Survey introduction -->
+<div id="introduction">
+<div class="columns">
+  <div class="column">
+  <div class="card">
+    <header class="card-header">
+    <p class="card-header-title">Introduction</p>
+    </header>
+    <div class="card-content">
+      <p class="content has-text-justified has-text-left-mobile">
+        A color cycle is an ordered set of colors used for plotting categorical
+        data for visualization. Unfortunately, most existing color cycles are
+        not colorblind-friendly. This is an issue since a significant fraction
+        of those viewing a particular plot may be colorblind, especially in
+        fields with diversity shortcomings. The technical aspect of this can be
+        resolved by enforcing minimum perceptual distances between colors, both
+        for normal color vision and for various types of simulated
+        <a href="https://en.wikipedia.org/wiki/Color_blindness">color vision deficiencies</a>.
+      </p><div class="card content">
+        <header class="card-header">
+        <p class="card-header-title">Category 10 color cycle (default in Matplotlib, D3.js, etc.)</p>
+        </header>
+        <div class="card-content">
+        <div class="columns has-text-centered">
+          <div class="column">
+            <canvas id="canvas-intro1" aria-label="Original category 10 color cycle rendered as a line chart" role="img"></canvas>
+            <p class="content">Original</p>
+          </div>
+          <div class="column">
+            <canvas id="canvas-intro2" aria-label="Deuteranopia simulation of category 10 color cycle rendered as a line chart" role="img"></canvas>
+            <p class="content">Simulated deuteranopia</p>
+          </div>
+          <div class="column">
+            <canvas id="canvas-intro3" aria-label="Protanopia simulation of category 10 color cycle rendered as a line chart" role="img"></canvas>
+            <p class="content">Simulated protanopia</p>
+          </div>
+          </div>
+        </div>
+      </div><p class="content has-text-justified has-text-left-mobile">
+        However, this leaves the aesthetic aspect, which is where
+        this survey comes in. The goal of this survey is to crowd-source the
+        information needed to generate aesthetically pleasing color cycles that
+        are also colorblind-friendly. Randomly generated color sets and cycles,
+        which have a minimum perceptual distance enforced between colors, are
+        presented for the user to choose the most pleasing one. These data were
+        used to train a model to generate aesthetically pleasing color cycles.
+      </p><p class="content has-text-justified has-text-left-mobile has-text-weight-bold">
+        Currently, the same color sets and cycles are being shown to all users,
+        to verify the model.
+      </p>
+      <button id="introductionRead" class="button is-info is-medium" aria-label="As this survey is about colors, it should not be taken with a screen reader.">Continue</button>
+    </div>
+  </div>
+  </div>
+</div>
+</div>
+
+
+<!-- Questionnaire -->
+<div id="questions">
+<div class="columns">
+  <div class="column">
+  <div class="card">
+    <header class="card-header">
+    <p class="card-header-title">Questionnaire</p>
+    </header>
+    <div class="card-content">
+      <p class="content">Please answer a few (optional) questions to get started. Only anonymized data will be released. See the <a href="/about/">about &amp; privacy page</a> for details on data collection and usage. First-party cookies are also used.</p>
+      <form id="questionnaire" class="content">
+        <div class="field">
+          <label class="label">Do you consent to the above mentioned data collection?</label>
+          <div class="control">
+            <label class="checkbox">
+            <input type="checkbox" name="Consent" value="yes">I consent to data collection</label>
+          </div>
+          <p class="help">Taking a survey obviously requires data collection.</p>
+        </div>
+        <div class="field">
+          <label class="label">Are you colorblind?</label>
+          <div class="control">
+            <label class="radio">
+              <input type="radio" name="ColorblindQ" value="y">Yes
+            </label>
+            <label class="radio">
+              <input type="radio" name="ColorblindQ" value="n">No
+            </label>
+            <label class="radio">
+              <input type="radio" name="ColorblindQ" value="dk">Don&rsquo;t know
+            </label>
+            <label class="radio">
+              <input type="radio" name="ColorblindQ" value="dta">Decline to answer
+            </label>
+          </div>
+        </div>
+        <div class="field">
+          <label class="label">Type of colorblindness</label>
+          <div class="control">
+            <div class="select">
+              <select disabled id="colorblindnessSelect" name="ColorblindTypeQ">
+                <option value="na">Not applicable</option>
+                <option value="dta">Decline to answer</option>
+                <option value="dk">Don&rsquo;t know</option>
+                <option value="dy">Deuteranomaly (partial green deficiency) [most common]</option>
+                <option value="py">Protanomaly (partial red deficiency)</option>
+                <option value="da">Deuteranopia (complete green deficiency)</option>
+                <option value="pa">Protanopia (complete red deficiency)</option>
+                <option value="ty">Tritanomaly (partial blue deficiency) [rare]</option>
+                <option value="ta">Tritanopia (complete blue deficiency) [rare]</option>
+                <option value="m">Monochromasy (complete colorblindness) [rare]</option>
+                <option value="o">Other</option>
+              </select>
+            </div>
+          </div>
+        </div>
+      </form>
+      <p class="content">If you are running software to change your display&rsquo;s color temperature, e.g., f.lux, Night Shift, or Redshift, please turn it off before continuing.</p>
+      <button id="submitAnswers" class="button is-info is-medium">Continue</button>
+    </div>
+  </div>
+  </div>
+</div>
+</div>
+
+
+<!-- Survey directions -->
+<div id="directions">
+<div class="columns">
+  <div class="column">
+  <div class="card">
+    <header class="card-header">
+    <p class="card-header-title">Directions</p>
+    </header>
+    <div class="card-content">
+      <p class="content has-text-weight-bold">Each iteration of this survey consists of two steps:</p>
+      <p class="content">First, you&rsquo;ll be presented with two color sets, which are ordered by hue. Choose the colors you prefer (not the order).</p>
+      <div class="columns">
+      <div class="column tag-box">
+      <div class="tags">
+        <span class="tag is-light">A</span>
+        <span class="tag is-warning">B</span>
+        <span class="tag is-primary">C</span>
+        <span class="tag is-info">D</span>
+      </div>
+      </div>
+      <div class="is-divider-vertical" data-content="OR"></div>
+      <div class="column tag-box">
+      <div class="tags">
+        <span class="tag is-dark">E</span>
+        <span class="tag is-success">F</span>
+        <span class="tag is-link">G</span>
+        <span class="tag is-danger">H</span>
+      </div>
+      </div>
+      </div>
+      <p class="content">Then, you&rsquo;ll be presented with four different permutations of one of the sets (not necessarily the one you chose). Choose the order you prefer (the colors are the same).</p>
+      <div class="columns">
+      <div class="column tag-box">
+      <div class="tags">
+        <span class="tag is-primary">1</span>
+        <span class="tag is-info">2</span>
+        <span class="tag is-light">3</span>
+        <span class="tag is-warning">4</span>
+      </div>
+      </div>
+      <div class="is-divider-vertical" data-content="OR"></div>
+      <div class="column tag-box">
+      <div class="tags">
+        <span class="tag is-warning">4</span>
+        <span class="tag is-info">2</span>
+        <span class="tag is-primary">1</span>
+        <span class="tag is-light">3</span>
+      </div>
+      </div>
+      <div class="is-divider-vertical" data-content="OR"></div>
+      <div class="column tag-box">
+      <div class="tags">
+        <span class="tag is-light">3</span>
+        <span class="tag is-primary">1</span>
+        <span class="tag is-warning">4</span>
+        <span class="tag is-info">2</span>
+      </div>
+      </div>
+      <div class="is-divider-vertical" data-content="OR"></div>
+      <div class="column tag-box">
+      <div class="tags">
+        <span class="tag is-info">2</span>
+        <span class="tag is-light">3</span>
+        <span class="tag is-primary">1</span>
+        <span class="tag is-warning">4</span>
+      </div>
+      </div>
+      </div>
+      <p class="content">
+        Remember, the first few colors are the most important, since they will
+        be used more often, e.g., a plot with only two elements would only use
+        the first two colors in a given color cycle.
+      </p>
+      <p class="content">
+        <span class="has-text-weight-bold">This process will repeat 100 times.</span>
+        If you make a mistake, keep going; your browser&rsquo;s back button
+        will not work.
+      </p>
+      <button id="directionsRead" class="button is-info is-medium">Start survey</button>
+    </div>
+  </div>
+  </div>
+</div>
+</div>
+
+
+<!-- Survey color set picking view -->
+<div id="sets">
+<h2 class="subtitle">Choose set:</h2>
+<div class="columns">
+  <div class="column">
+  <div class="set card">
+    <header class="card-header">
+    <p class="card-header-title">Set A</p>
+    </header>
+    <div class="card-content">
+    <div class="columns is-vcentered has-text-centered is-mobile">
+    <div class="column is-narrow color-column">
+    <p class="cbp"><span class="tag is-medium cb" id="s1c0"></span></p>
+    <p class="cbp"><span class="tag is-medium cb" id="s1c1"></span></p>
+    <p class="cbp"><span class="tag is-medium cb" id="s1c2"></span></p>
+    <p class="cbp"><span class="tag is-medium cb" id="s1c3"></span></p>
+    <p class="cbp"><span class="tag is-medium cb" id="s1c4"></span></p>
+    <p class="cbp"><span class="tag is-medium cb" id="s1c5"></span></p>
+    <p class="cbp"><span class="tag is-medium cb" id="s1c6"></span></p>
+    <p class="cbp"><span class="tag is-medium cb" id="s1c7"></span></p>
+    <p class="cbp"><span class="tag is-medium cb" id="s1c8"></span></p>
+    <p class="cbp"><span class="tag is-medium cb" id="s1c9"></span></p>
+    </div>
+    <div class="column">
+    <canvas id="canvas1"></canvas>
+    </div>
+    </div>
+    </div>
+    <footer class="card-footer">
+    <a href="#" id="pickset1" class="card-footer-item">Pick</a>
+    </footer>
+  </div>
+  </div>
+  <div class="column">
+  <div class="set card">
+    <header class="card-header">
+    <p class="card-header-title">Set B</p>
+    </header>
+    <div class="card-content">
+    <div class="columns is-vcentered has-text-centered is-mobile">
+    <div class="column is-narrow color-column">
+    <p class="cbp"><span class="tag is-medium cb" id="s2c0"></span></p>
+    <p class="cbp"><span class="tag is-medium cb" id="s2c1"></span></p>
+    <p class="cbp"><span class="tag is-medium cb" id="s2c2"></span></p>
+    <p class="cbp"><span class="tag is-medium cb" id="s2c3"></span></p>
+    <p class="cbp"><span class="tag is-medium cb" id="s2c4"></span></p>
+    <p class="cbp"><span class="tag is-medium cb" id="s2c5"></span></p>
+    <p class="cbp"><span class="tag is-medium cb" id="s2c6"></span></p>
+    <p class="cbp"><span class="tag is-medium cb" id="s2c7"></span></p>
+    <p class="cbp"><span class="tag is-medium cb" id="s2c8"></span></p>
+    <p class="cbp"><span class="tag is-medium cb" id="s2c9"></span></p>
+    </div>
+    <div class="column">
+    <canvas id="canvas2"></canvas>
+    </div>
+    </div>
+    </div>
+    <footer class="card-footer">
+    <!--<button id="pickset2" class="button">Pick 2</button>-->
+     <a href="#" id="pickset2" class="card-footer-item">Pick</a>
+    </footer>
+  </div>
+  </div>
+</div>
+</div>
+
+
+<!-- Survey color cycle picking view -->
+<div id="cycles">
+<h2 class="subtitle">Choose cycle:</h2>
+<div class="columns">
+<div class="column">
+<div class="columns is-mobile">
+  <div class="column">
+  <div class="set card">
+    <header class="card-header">
+    <p class="card-header-title">Cycle 1</p>
+    </header>
+    <div class="card-content">
+    <table>
+    <tbody>
+    <tr id="c1r0"><td class="has-text-right"><span class="tag is-medium has-background-white has-text-grey">1</span></td><td><span class="tag is-medium cb" id="c1c0"></span></td></tr>
+    <tr id="c1r1"><td class="has-text-right"><span class="tag is-medium has-background-white has-text-grey">2</span></td><td><span class="tag is-medium cb" id="c1c1"></span></td></tr>
+    <tr id="c1r2"><td class="has-text-right"><span class="tag is-medium has-background-white has-text-grey">3</span></td><td><span class="tag is-medium cb" id="c1c2"></span></td></tr>
+    <tr id="c1r3"><td class="has-text-right"><span class="tag is-medium has-background-white has-text-grey">4</span></td><td><span class="tag is-medium cb" id="c1c3"></span></td></tr>
+    <tr id="c1r4"><td class="has-text-right"><span class="tag is-medium has-background-white has-text-grey">5</span></td><td><span class="tag is-medium cb" id="c1c4"></span></td></tr>
+    <tr id="c1r5"><td class="has-text-right"><span class="tag is-medium has-background-white has-text-grey">6</span></td><td><span class="tag is-medium cb" id="c1c5"></span></td></tr>
+    <tr id="c1r6"><td class="has-text-right"><span class="tag is-medium has-background-white has-text-grey">7</span></td><td><span class="tag is-medium cb" id="c1c6"></span></td></tr>
+    <tr id="c1r7"><td class="has-text-right"><span class="tag is-medium has-background-white has-text-grey">8</span></td><td><span class="tag is-medium cb" id="c1c7"></span></td></tr>
+    <tr id="c1r8"><td class="has-text-right"><span class="tag is-medium has-background-white has-text-grey">9</span></td><td><span class="tag is-medium cb" id="c1c8"></span></td></tr>
+    <tr id="c1r9"><td class="has-text-right"><span class="tag is-medium has-background-white has-text-grey">10</span></td><td><span class="tag is-medium cb" id="c1c9"></span></td></tr>
+    </tbody>
+    </table>
+    </div>
+    <footer class="card-footer">
+    <a href="#" id="pickcycle1" class="card-footer-item">Pick</a>
+    </footer>
+  </div>
+  </div>
+  <div class="column">
+  <div class="set card">
+    <header class="card-header">
+    <p class="card-header-title">Cycle 2</p>
+    </header>
+    <div class="card-content">
+    <table>
+    <tbody>
+    <tr id="c2r0"><td class="has-text-right"><span class="tag is-medium has-background-white has-text-grey">1</span></td><td><span class="tag is-medium cb" id="c2c0"></span></td></tr>
+    <tr id="c2r1"><td class="has-text-right"><span class="tag is-medium has-background-white has-text-grey">2</span></td><td><span class="tag is-medium cb" id="c2c1"></span></td></tr>
+    <tr id="c2r2"><td class="has-text-right"><span class="tag is-medium has-background-white has-text-grey">3</span></td><td><span class="tag is-medium cb" id="c2c2"></span></td></tr>
+    <tr id="c2r3"><td class="has-text-right"><span class="tag is-medium has-background-white has-text-grey">4</span></td><td><span class="tag is-medium cb" id="c2c3"></span></td></tr>
+    <tr id="c2r4"><td class="has-text-right"><span class="tag is-medium has-background-white has-text-grey">5</span></td><td><span class="tag is-medium cb" id="c2c4"></span></td></tr>
+    <tr id="c2r5"><td class="has-text-right"><span class="tag is-medium has-background-white has-text-grey">6</span></td><td><span class="tag is-medium cb" id="c2c5"></span></td></tr>
+    <tr id="c2r6"><td class="has-text-right"><span class="tag is-medium has-background-white has-text-grey">7</span></td><td><span class="tag is-medium cb" id="c2c6"></span></td></tr>
+    <tr id="c2r7"><td class="has-text-right"><span class="tag is-medium has-background-white has-text-grey">8</span></td><td><span class="tag is-medium cb" id="c2c7"></span></td></tr>
+    <tr id="c2r8"><td class="has-text-right"><span class="tag is-medium has-background-white has-text-grey">9</span></td><td><span class="tag is-medium cb" id="c2c8"></span></td></tr>
+    <tr id="c2r9"><td class="has-text-right"><span class="tag is-medium has-background-white has-text-grey">10</span></td><td><span class="tag is-medium cb" id="c2c9"></span></td></tr>
+    </tbody>
+    </table>
+    </div>
+    <footer class="card-footer">
+    <a href="#" id="pickcycle2" class="card-footer-item">Pick</a>
+    </footer>
+  </div>
+  </div>
+</div>
+</div>
+<div class="column">
+<div class="columns is-mobile">
+  <div class="column">
+  <div class="set card">
+    <header class="card-header">
+    <p class="card-header-title">Cycle 3</p>
+    </header>
+    <div class="card-content">
+    <table>
+    <tbody>
+    <tr id="c3r0"><td class="has-text-right"><span class="tag is-medium has-background-white has-text-grey">1</span></td><td><span class="tag is-medium cb" id="c3c0"></span></td></tr>
+    <tr id="c3r1"><td class="has-text-right"><span class="tag is-medium has-background-white has-text-grey">2</span></td><td><span class="tag is-medium cb" id="c3c1"></span></td></tr>
+    <tr id="c3r2"><td class="has-text-right"><span class="tag is-medium has-background-white has-text-grey">3</span></td><td><span class="tag is-medium cb" id="c3c2"></span></td></tr>
+    <tr id="c3r3"><td class="has-text-right"><span class="tag is-medium has-background-white has-text-grey">4</span></td><td><span class="tag is-medium cb" id="c3c3"></span></td></tr>
+    <tr id="c3r4"><td class="has-text-right"><span class="tag is-medium has-background-white has-text-grey">5</span></td><td><span class="tag is-medium cb" id="c3c4"></span></td></tr>
+    <tr id="c3r5"><td class="has-text-right"><span class="tag is-medium has-background-white has-text-grey">6</span></td><td><span class="tag is-medium cb" id="c3c5"></span></td></tr>
+    <tr id="c3r6"><td class="has-text-right"><span class="tag is-medium has-background-white has-text-grey">7</span></td><td><span class="tag is-medium cb" id="c3c6"></span></td></tr>
+    <tr id="c3r7"><td class="has-text-right"><span class="tag is-medium has-background-white has-text-grey">8</span></td><td><span class="tag is-medium cb" id="c3c7"></span></td></tr>
+    <tr id="c3r8"><td class="has-text-right"><span class="tag is-medium has-background-white has-text-grey">9</span></td><td><span class="tag is-medium cb" id="c3c8"></span></td></tr>
+    <tr id="c3r9"><td class="has-text-right"><span class="tag is-medium has-background-white has-text-grey">10</span></td><td><span class="tag is-medium cb" id="c3c9"></span></td></tr>
+    </tbody>
+    </table>
+    </div>
+    <footer class="card-footer">
+    <a href="#" id="pickcycle3" class="card-footer-item">Pick</a>
+    </footer>
+  </div>
+  </div>
+  <div class="column">
+  <div class="set card">
+    <header class="card-header">
+    <p class="card-header-title">Cycle 4</p>
+    </header>
+    <div class="card-content">
+    <table>
+    <tbody>
+    <tr id="c4r0"><td class="has-text-right"><span class="tag is-medium has-background-white has-text-grey">1</span></td><td><span class="tag is-medium cb" id="c4c0"></span></td></tr>
+    <tr id="c4r1"><td class="has-text-right"><span class="tag is-medium has-background-white has-text-grey">2</span></td><td><span class="tag is-medium cb" id="c4c1"></span></td></tr>
+    <tr id="c4r2"><td class="has-text-right"><span class="tag is-medium has-background-white has-text-grey">3</span></td><td><span class="tag is-medium cb" id="c4c2"></span></td></tr>
+    <tr id="c4r3"><td class="has-text-right"><span class="tag is-medium has-background-white has-text-grey">4</span></td><td><span class="tag is-medium cb" id="c4c3"></span></td></tr>
+    <tr id="c4r4"><td class="has-text-right"><span class="tag is-medium has-background-white has-text-grey">5</span></td><td><span class="tag is-medium cb" id="c4c4"></span></td></tr>
+    <tr id="c4r5"><td class="has-text-right"><span class="tag is-medium has-background-white has-text-grey">6</span></td><td><span class="tag is-medium cb" id="c4c5"></span></td></tr>
+    <tr id="c4r6"><td class="has-text-right"><span class="tag is-medium has-background-white has-text-grey">7</span></td><td><span class="tag is-medium cb" id="c4c6"></span></td></tr>
+    <tr id="c4r7"><td class="has-text-right"><span class="tag is-medium has-background-white has-text-grey">8</span></td><td><span class="tag is-medium cb" id="c4c7"></span></td></tr>
+    <tr id="c4r8"><td class="has-text-right"><span class="tag is-medium has-background-white has-text-grey">9</span></td><td><span class="tag is-medium cb" id="c4c8"></span></td></tr>
+    <tr id="c4r9"><td class="has-text-right"><span class="tag is-medium has-background-white has-text-grey">10</span></td><td><span class="tag is-medium cb" id="c4c9"></span></td></tr>
+    </tbody>
+    </table>
+    </div>
+    <footer class="card-footer">
+    <a href="#" id="pickcycle4" class="card-footer-item">Pick</a>
+    </footer>
+  </div>
+  </div>
+</div>
+</div>
+</div>
+</div>
+
+
+<!-- Survey completion -->
+<div id="completion">
+<div class="columns">
+  <div class="column">
+  <div class="card">
+    <header class="card-header">
+    <p class="card-header-title">Completion</p>
+    </header>
+    <div class="card-content">
+      <p class="content">
+        Thank you for completing this validation survey!
+      </p>
+    </div>
+  </div>
+  </div>
+</div>
+</div>
+
+
+</div>
+</main>
+
+<!-- Footer -->
+<footer class="site-footer has-background-light">
+  <div class="content has-text-grey has-text-centered is-size-7">
+    <p>
+      <span class="is-hidden-mobile">A project by <a class="has-text-grey has-text-weight-bold" href="https://mpetroff.net/">Matthew Petroff</a> &emsp;|&emsp;</span>
+      <a class="has-text-grey has-text-weight-bold" href="/about/">About &amp; Privacy</a> &emsp;|&emsp;
+      <a class="has-text-grey has-text-weight-bold" href="#" id="newSession">New Session</a>
+    </p>
+  </div>
+</footer>
+
+<script nomodule>
+alert('Your browser does not fully support ES6 and may have issues with this page!');
+</script>
+<script src="script.js"></script>
+</body>
+</html>
