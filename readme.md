@@ -97,6 +97,22 @@ The `lightness-analysis` directory contains a reanalysis of the scatter plot acc
 
 
 
+## Changelog
+
+### v2.0
+
+* Added validation survey and results
+* Fixed data loading bug in cycle model: this affected the model but did not affect the final cycles
+* Added evaluation of score ranges
+* Added statistical comparison of linear model and machine learning model for sets
+* Moved NumPy model out of notebook
+
+### v1.0
+
+* Initial release.
+
+
+
 ## License
 
 The code contained in this repository is distributed under the [MIT License](https://opensource.org/licenses/MIT).
