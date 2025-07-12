@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="en-US">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<title>Color Palette Validation</title>
+<link rel="stylesheet" href="bulma.min.css">
+
+<style>
+.site {
+  display: flex;
+  height: 100vh;
+  flex-direction: column;
+}
+.site-content {
+  flex: 1;
+}
+canvas {
+  width: 600px;
+  height: 600px;
+  border: solid 1px;
+}
+#recorded {
+  visibility: hidden;
+}
+</style>
+
+<noscript>
+<style>#directions {display: none;}</style>
+</noscript>
+
+</head>
+<body class="site">
+
+<main class="site-content">
+<div style="height: 1rem;"></div>
+<div style="height: 2rem;" class="is-hidden-touch"></div>
+<div class="container" style="padding: 0 1rem;">
+
+<div class="columns is-vcentered is-mobile">
+  <div class="column is-narrow">
+    <h1 class="title is-marginless is-size-5-touch">Color Palette Validation</h1>
+  </div>
+  <div class="column">
+    <div id="picks">
+      <div class="tags has-addons" style="justify-content: flex-end;">
+        <span class="tag">Responses</span>
+        <span id="numPicks" class="tag is-primary"></span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- Error message for no JavaScript -->
+<noscript>
+<p class="content">
+JavaScript is required for this survey.
+</p><p class="content">
+While it could have been implemented without client-side scripting, such
+scripting allowed for easier development and a simpler back end, which was
+deemed an acceptable trade-off for this ephemeral application.
+</p>
+</noscript>
+
+<!-- Error message for phone -->
+<p class="content is-hidden-desktop" id="phone">
+This survey is meant to be taken on a desktop / laptop computer, not a phone or tablet.
+</p>
+
+<!-- Survey directions -->
+<div id="directions" class="is-hidden-touch">
+<div class="columns">
+  <div class="column">
+  <div class="card">
+    <header class="card-header">
+    <p class="card-header-title">Purpose &amp; Directions</p>
+    </header>
+    <div class="card-content">
+      <p class="content">This survey aims to validate a perceptual metric used to evaluate color palettes used for scientific data visualization.</p>
+      <p class="content">You will be presented with a series of 56 scatter plots. Please view the plots at a typical distance from your monitor and select the number of distinct colors in each plot. This process is expected to take 15&ndash;20 minutes to complete.</p>
+      <p class="content">This survey is completely voluntary. There are no negative consequences if you do not want to take it, and if you start the survey, you can change your mind and stop at any time. There is no compensation for participation.</p>
+      <p class="content">This survey is anonymous, no identifiable information will be collected, and no one will be able to link your responses back to you. The only data collected are the answer to the color-vision classification question below and the responses to the subsequent multiple-choice questions.</p>
+      <p class="content">By continuing below, you agree to participate in the study.</p>
+      <p class="content">Please close this window if you do not wish to participate, are not 18 years of age or older, or were not provided this link directly by Dr. Matthew Petroff.</p>
+      <p class="content">If you have questions about this research, please contact Dr. Matthew Petroff of the Center for Astrophysics, Harvard &amp; Smithsonian: [email address removed]</p>
+      <form id="cvd-question" onsubmit="event.preventDefault();">
+        <div class="field">
+          <label class="label">Color vision type</label>
+          <div class="control">
+            <div class="select">
+              <select id="cvd-type" required>
+                <option value="">Select response</option>
+                <option value="typ">Typical trichromat</option>
+                <option value="deut">Deuteran (green deficiency)</option>
+                <option value="prot">Protan (red deficiency)</option>
+                <option value="trit">Tritan (blue deficiency)</option>
+              </select>
+            </div>
+          </div>
+        </div>
+        <div class="control">
+          <button class="button is-info is-medium" id="start">Start survey</button>
+        </div>
+      </form>
+    </div>
+  </div>
+  </div>
+</div>
+</div>
+
+<!-- Survey -->
+<div class="columns is-hidden-touch" id="survey-body" style="display: none;">
+  <div class="column">
+    <canvas id="canvas"></canvas>
+  </div>
+  <div class="column">
+    <nav class="panel">
+      <p class="panel-heading">Select number of distinct colors in plot</p>
+      <a class="panel-block is-unselectable" id="s1">1</a>
+      <a class="panel-block is-unselectable" id="s2">2</a>
+      <a class="panel-block is-unselectable" id="s3">3</a>
+      <a class="panel-block is-unselectable" id="s4">4</a>
+      <a class="panel-block is-unselectable" id="s5">5</a>
+      <a class="panel-block is-unselectable" id="s6">6</a>
+      <a class="panel-block is-unselectable" id="s7">7</a>
+      <a class="panel-block is-unselectable" id="s8">8</a>
+      <a class="panel-block is-unselectable" id="s9">9</a>
+      <a class="panel-block is-unselectable" id="s10">10</a>
+      <a class="panel-block is-unselectable" id="s11">11</a>
+      <a class="panel-block is-unselectable" id="s12">12</a>
+    </nav>
+  </div>
+</div>
+
+<!-- Completion -->
+<div class="columns" id="done" style="display: none;">
+  <div class="column">
+    <p class="is-size-1">Survey is complete! Thank you!</p>
+    <p id="recorded">Your responses have been recorded. You may close this window.</p>
+    <p class="has-text-grey-light" id="data"></p>
+  </div>
+</div>
+
+</div>
+</main>
+
+<script src="cycles_in_best_order.js"></script>
+<script src="points.js"></script>
+<script src="anglesorderplotnum.js"></script>
+<script>
+//
+// Functions for rendering color set visualizations
+//
+
+// Dimensions of visualizations
+const size = 600,
+    margin = 50,
+    dpr = window.devicePixelRatio || 1;
+
+const radius = 4;
+
+// Initialize canvas
+const canvasElem = document.getElementById('canvas');
+canvasElem.width = canvasElem.height = size * dpr;
+const ctx = canvasElem.getContext('2d');
+ctx.scale(dpr, dpr);
+
+/**
+ * Draw a scatter plot visualization.
+ * @param {CanvasRenderingContext2D} ctx - Canvas context
+ * @param {number} angle - Angle (in radians) to rotate points
+ * @param {Array} colors - Array of colors to draw
+ */
+function drawScatter(ctx, angle, colors) {
+    // Find center of bounding box of points
+    let minx = 0, maxx = 0, miny = 0, maxy = 0;
+    for (let i = 0; i < points.length; i++) {
+        const p = points[i];
+        const x = p.r * Math.cos(p.theta + angle);
+        const y = p.r * Math.sin(p.theta + angle);
+        minx = Math.min(minx, x);
+        maxx = Math.max(maxx, x);
+        miny = Math.min(miny, y);
+        maxy = Math.max(maxy, y);
+    }
+    let centerx = (minx + maxx) / 2;
+    let centery = (miny + maxy) / 2;
+    // Draw scatter plot, with bounding box centered
+    ctx.clearRect(0, 0, size, size);
+    for (let i = 0; i < points.length; i++) {
+        const p = points[i];
+        ctx.beginPath();
+        ctx.fillStyle = colors[p.cat[(colors.length - 6) * 2]];
+        ctx.arc(
+            (p.r * Math.cos(p.theta + angle) - centerx) * (size - 2 * margin) + size / 2,
+            (p.r * Math.sin(p.theta + angle) - centery) * (size - 2 * margin) + size / 2,
+            radius, 0, 2 * Math.PI
+        );
+        ctx.fill();
+    }
+}
+
+let responses = [];
+let data = {"responses": responses};
+let questionNum = 0;
+const numPicks = document.getElementById('numPicks');
+
+/**
+ * Update response counter.
+ */
+function updateProgress() {
+    numPicks.innerHTML = `${questionNum} / ${cyclesInBestOrder.length}`;
+}
+
+/**
+ * Draw plot for next question.
+ */
+function draw() {
+    const entry = cyclesInBestOrder[order[questionNum]];
+    const colors = entry[Math.min(plotnum[questionNum], entry.length - 1)][2]; // For six colors, there's only one option
+    drawScatter(ctx, angles[questionNum] * Math.PI / 180, colors);
+    updateProgress();
+}
+
+/**
+ * Record a response (and response time) and update for next question.
+ * @param {number} response - Answer for number of colors in current plot
+ */
+function processResponse(response) {
+    const t1 = Date.now();
+    responses.push([response, t1 - t0]);
+    t0 = t1;
+    questionNum += 1;
+    if (questionNum < cyclesInBestOrder.length) {
+        draw();
+    } else {
+        // Signal completion
+        updateProgress();
+        document.getElementById("data").innerHTML = "Data: " + JSON.stringify(data, null);
+        document.getElementById("survey-body").style.display = 'none';
+        document.getElementById("done").style.display = 'flex';
+        // Log response
+        const xhr = new XMLHttpRequest();
+        xhr.addEventListener("load", () => {
+            document.getElementById("recorded").style.visibility = 'visible';
+        });
+        xhr.open("POST", "log.php", true);
+        xhr.setRequestHeader("Content-Type", "application/json");
+        xhr.send(JSON.stringify(data, null));
+    }
+}
+
+// Wire up response buttons
+for (let i = 1; i <= 12; i++)
+    document.getElementById("s" + i).addEventListener('click', () => processResponse(i));
+
+// Start survey
+let t0;
+document.getElementById("start").addEventListener('click', () => {
+    if (document.getElementById("cvd-type").value == '')
+        return;
+    data.cvdType = document.getElementById("cvd-type").value;
+    document.getElementById("directions").style.display = 'none';
+    document.getElementById("survey-body").style.display = 'flex';
+    t0 = Date.now();
+    //draw();
+    setTimeout(draw, 20); // Without timeout, Firefox was having an issue for some reason
+});
+document.getElementById("cvd-question").reset();
+updateProgress();
+</script>
+
+</body>
+</html>

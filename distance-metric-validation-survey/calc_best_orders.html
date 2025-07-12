@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>Best cycle orders</title>
+
+<script type="text/javascript" src="tvcg-2864912-mm/code/js/lib/d3.js"></script>
+<script type="text/javascript" src="tvcg-2864912-mm/code/js/lib/flann.js"></script>
+<script type="text/javascript" src="js/d3-cam02.min.js"></script>
+
+<script type="text/javascript" src="tvcg-2864912-mm/code/js/util.js"></script>
+<script type="text/javascript" src="tvcg-2864912-mm/code/js/getSigmasAndScores.js"></script>
+<script type="text/javascript" src="js/cvd.js"></script>
+<script type="text/javascript" src="points.js"></script>
+</head>
+<body>
+<pre id="output"></pre>
+<script type="text/javascript">
+// Patch in new color difference metric, $\Delta E_{cvd}$
+function euclidean_of_rgb(rgb1, rgb2) {
+    let score = d3.jab(rgb1).de(d3.jab(rgb2));
+    ['protanomaly', 'deuteranomaly', 'tritanomaly'].forEach(function(key) {
+        for (let i = 1; i <= 100; i++) {
+            const jab_cvd1 = d3.jab(cvd_forward(rgb1, key, i));
+            const jab_cvd2 = d3.jab(cvd_forward(rgb2, key, i));
+            score = Math.min(score, jab_cvd1.de(jab_cvd2));
+        }
+    });
+    return score;
+}
+
+const cycles = {
+    "This Work 6": ["#5790fc", "#f89c20", "#e42536", "#964a8b", "#9c9ca1", "#7a21dd"],
+    "This Work 8": ["#1845fb", "#ff5e02", "#c91f16", "#c849a9", "#adad7d", "#86c8dd", "#578dff", "#656364"],
+    "This Work 10": ["#3f90da", "#ffa90e", "#bd1f01", "#94a4a2", "#832db6", "#a96b59", "#e76300", "#b9ac70", "#717581", "#92dadd"],
+    "Seaborn Deep": ["#4C72B0", "#DD8452", "#55A868", "#C44E52", "#8172B3", "#937860", "#DA8BC3", "#8C8C8C", "#CCB974", "#64B5CD"],
+    "Seaborn Colorblind": ["#0173B2", "#DE8F05", "#029E73", "#D55E00", "#CC78BC", "#CA9161", "#FBAFE4", "#949494", "#ECE133", "#56B4E9"],
+    "Category 10": ["#1f77b4", "#ff7f0e", "#2ca02c", "#d62728", "#9467bd", "#8c564b", "#e377c2", "#7f7f7f", "#bcbd22", "#17becf"],
+    "Tableau Color Blind": ["#1170aa", "#fc7d0b", "#a3acb9", "#57606c", "#5fa2ce", "#c85200", "#7b848f", "#a3cce9", "#ffbc79", "#c8d0d9"],
+    "Tableau 10": ["#4e79a7", "#f28e2b", "#e15759", "#76b7b2", "#59a14f", "#edc948", "#b07aa1", "#ff9da7", "#9c755f", "#bab0ac"],
+    "Microsoft Excel": ["#417ebf", "#e38248", "#a5a6a7", "#faba45", "#5da3d1", "#7ca353", "#224873", "#964b29", "#616263", "#95702e"],
+    "MATLAB": ["#0072BD", "#D95319", "#EDB120", "#7E2F8E", "#77AC30", "#4DBEEE", "#A2142F"],
+    "LibreOffice Calc": ["#004586", "#ff420e", "#ffd320", "#579d1c", "#7e0021", "#83caff", "#314004", "#aecf00", "#4b1f6f", "#ff950e"],
+    "Google Sheets": ["#4285f4", "#ea4335", "#fbbc04", "#34a853", "#ff6d01", "#46bdc6", "#7baaf7", "#f07b72", "#fcd04f", "#71c287"],
+    "R": ["#000000", "#df536b", "#61d04f", "#2297e6", "#28e2e5", "#cd0bbc", "#f5c710", "#9e9e9e"],
+    "Okabe and Ito": ["#000000", "#E69F00", "#56B4E9", "#009E73", "#F0E442", "#0072B2", "#D55E00", "#CC79A7"],
+    "ColorBrewer Set 1": ["#e41a1c", "#377eb8", "#4daf4a", "#984ea3", "#ff7f00", "#ffff33", "#a65628", "#f781bf", "#999999"],
+    "Mathematica": ["#5e81b5", "#e19c24", "#8fb032", "#eb6235", "#8778b3", "#c56e1a", "#5d9ec7", "#ffbf00", "#a5609d", "#929600"],
+    "batlowS": ["#011959", "#faccfa", "#828231", "#226061", "#f19d6b", "#fdb4b4", "#114360", "#4d734d", "#c09036", "#175262"],
+    "Plots.jl": ["#009AFA", "#E36F47", "#3EA44E", "#C371D2", "#AC8E18", "#00AAAE", "#ED5E93", "#C68225", "#00A98D", "#8E971E"],
+    "Tol Bright": ["#4477AA", "#EE6677", "#228833", "#CCBB44", "#66CCEE", "#AA3377", "#BBBBBB"],
+    "Plotly": ["#636EFA", "#EF553B", "#00CC96", "#AB63FA", "#FFA15A", "#19D3F3", "#FF6692", "#B6E880", "#FF97FF", "#FECB52"],
+}
+
+// Stuff that needs to be global for getSigmasAndScores.js, for whatever reason
+const lambda = 0.6,
+    NeighborNum = 10,
+    bgcolor = "#fff",
+    xMap = d => d.x,
+    yMap = d => d.y;
+
+// Find worst assignments for each color cycle for each of five scatter plots
+let output = [];
+let labelSet = new Set([0, 1, 2, 3, 4, 5]);
+for (let i = 0; i < 5; i++) {
+    output.push([]);
+    data = points.map(d => ({
+        x: d.r * Math.cos(d.theta),
+        y: d.r * Math.sin(d.theta),
+        label: d.cat[i]
+    }));
+    if (i == 1)
+        labelSet.add(6);
+    else if (i == 3)
+        labelSet.add(7);
+    Object.keys(cycles).forEach(function(key) {
+        palettes = cycles[key];
+        if (palettes.length >= labelSet.size) {
+            // Brute-force search for best order
+            [label2class, allSigma, scoreList, sortIndex, info, scoreFunc, cdScoreFunc] = getSigmasAndScores(labelSet, data, 0, 0, 0);
+            const best = allSigma[sortIndex.pop()].map(d => palettes[d]);
+            output[i].push([key, labelSet.size, best]);
+        }
+    });
+}
+
+// Flatten unique cycle / length combinations
+let output2 = [];
+for (let j = 0; j < output[0].length; j++)
+    output2.push([output[0][j]]);
+for (let i = 0; i < 2; i++)
+    for (let j = 0; j < output[1 + i * 2].length; j++)
+        output2.push([output[1 + i * 2][j], output[2 + i * 2][j]]);
+document.getElementById("output").innerHTML = "const cyclesInBestOrder = " + JSON.stringify(output2, null, 2) + ";";
+</script>
+</body>
+</html>

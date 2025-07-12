@@ -96,8 +96,23 @@ The `other-analysis` directory contains code for performing other analyses on th
 The `lightness-analysis` directory contains a reanalysis of the scatter plot accessibility data collected by Smart & Szafir (2019). The `lightness-analysis.ipynb` notebook contains the code used to perform this analysis, which looks at how scatter-plot-marker lightness affects response times. The [color-shape_data_processed.csv](https://osf.io/nz2y7/) file has a SHA-256 hash of `c0fe510d1b673d26a9fa1085fc5da3017b27cc3814c6e587a1800a7a647c778d` but is not included in this repository as it was not distributed with explicit licensing information.
 
 
+### Distance metric validation survey
+
+The `distance-metric-validation-survey` directory contains the code used to run the distance metric validation survey. See the enclosed `readme.md` file for additional details.
+
+
+### Distance metric validation survey results
+
+The `distance-metric-validation-survey-results` directory contains the results of the distance metric validation survey. The `log.txt` file contains the results of the survey, and the `analyze-results.ipynb` notebook contains the code used to analyze the results.
+
+
 
 ## Changelog
+
+### v3.0
+
+* Added distance metric validation survey and results
+* Recorded output of cycle comparison analysis
 
 ### v2.0
 
