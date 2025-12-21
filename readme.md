@@ -112,6 +112,7 @@ The `distance-metric-validation-survey-results` directory contains the results o
 ### v4.0
 
 * Added set generation visualization
+* Updated `batlowS` to version from v8 release of _Scientific Colour maps_
 
 ### v3.0
 
