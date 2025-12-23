@@ -114,6 +114,7 @@ The `distance-metric-validation-survey-results` directory contains the results o
 * Added set generation visualization
 * Updated `batlowS` to version from v8 release of _Scientific Colour maps_
 * Calculated statistical significance of aesthetic model accuracies
+* Generated extended sequence comparison table
 
 ### v3.0
 
