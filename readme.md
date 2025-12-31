@@ -1,7 +1,8 @@
 # Creating accessible color cycles for data visualization
 
-[![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.5806615.svg)](https://doi.org/10.5281/zenodo.5806615)
-[![arXiv](https://img.shields.io/badge/arXiv-2107.02270-red)](https://arxiv.org/abs/2107.02270)
+[doi:10.5281/zenodo.5806615](https://doi.org/10.5281/zenodo.5806615)
+
+[arXiv:2107.02270](https://arxiv.org/abs/2107.02270)
 
 This code serves as a supplement to the paper titled _Accessible Color Sequences for Data Visualization_. It contains code for creating random color sets with a minimum perceptual distance enforced, for running a color-cycle aesthetic-preference survey, for creating a machine-learning aesthetic-preference model based on the survey results, and for creating final color cycles that balance accessibility with aesthetics. Additionally, it includes data resulting from the survey and the analysis.
 
@@ -112,7 +113,7 @@ The `distance-metric-validation-survey-results` directory contains the results o
 ### v4.0
 
 * Added set generation visualization
-* Updated `batlowS` to version from v8 release of _Scientific Colour maps_
+* Updated `batlowS` to version from v8 release of _Scientific Colour Maps_
 * Calculated statistical significance of aesthetic model accuracies
 * Generated extended sequence comparison table
 
